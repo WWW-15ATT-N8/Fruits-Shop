@@ -1,0 +1,129 @@
+@charset "UTF-8";
+*{
+    margin: 0;
+    padding: 0;
+}
+#danhsachsanpham .row
+{
+    max-width: 1222.5px;
+    margin: 5vh auto;
+    text-align: left;
+}
+#danhsachsanpham #row-man{
+	 margin: 5vh auto !important;
+	 background-color: #fafafa;
+}
+
+#danhsachsanpham #row-man .picture{
+	border: 1px dashed gray ;
+    padding: 19px !important;
+    display: inline-block;
+    animation-name: img;
+    animation-duration: 3s;
+    margin-bottom: 5%;
+}
+
+#danhsachsanpham #row-man.picture:hover{
+    border: 2px dashed gold !important;
+}
+#danhsachsanpham #row-man .picture img{
+    margin:10px 0;
+    width: 100%;
+    max-width: 277px ;
+    max-height: 277px;
+    transition: filter .6s, opacity .6s, transform .6s, box-shadow .3s;
+}
+
+#danhsachsanpham #row-man .picture:hover img{
+    transform: scale(1.15,1.15);
+}
+#danhsachsanpham .picture a{
+    text-decoration: none;
+}
+
+
+#danhsachsanpham .name-watch{
+    margin-top: 10px;
+    text-align: center;
+    color: black;
+    font-size: 1em;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: break-spaces;
+    height: 3em;
+}
+#danhsachsanpham .name-watch:hover{
+    color: gold;
+}
+#danhsachsanpham .price{
+    text-align: center;
+    color: black;
+    font-size: 1em;
+    font-weight: bold;
+}
+.pagination{
+	height: auto;
+	width: auto;
+	margin: auto;
+}
+
+.pagination a {
+color: black;
+float: left;
+padding: 12px 18px;
+text-decoration: none;
+}
+/* set the style for the active class */
+.pagination a.active {
+background-color: dodgerblue;
+color: white;
+/*Circle Design with CSS*/
+border-radius: 50%;
+}
+/* add background color when user hovers on inactive class */
+.pagination a:hover:not(.active) {
+background-color: #ddd;
+border-radius: 50%;
+}
+#title-ds #path-ds{
+	padding: 0 !important;
+	font-size: 0.9em !important;
+}
+#title-ds #sl-ds{
+	text-align: right;
+	font-size: 0.8em !important;
+	line-height: 2em;
+}
+
+#title-ds #filter-ds{
+	text-align: right;
+	padding: 0 !important;
+}
+
+#title-ds #filter-ds #filter{
+	width: 100%;
+	font-size: 0.8em !important;
+}
+
+#title-ds #filter-ds option{
+	font-size: 0.8em;
+}
+
+
+
+
+
+ @keyframes img{
+     0%{
+       opacity: .0;
+       transform: scale(0);
+     }
+     
+     100%{
+       opacity: 1;
+       transform: scale(1);
+     }
+ }

@@ -1,0 +1,44 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.container-fluid{
+    padding: 0 !important;
+}
+.container-fluid .dich-vu-doanh-nghiep{
+    margin: auto;
+    width: 100%;
+    max-width: 1222.2px;
+}
+
+.container-fluid .dich-vu-doanh-nghiep > p{
+    color: #777;
+    font-family: "Roboto", sans-serif;
+    text-align: center;
+    font-size: 120%;
+    margin: 2% auto;
+}
+.container-fluid .dich-vu-doanh-nghiep .dich-vu-doanh-nghiep-img{
+    padding-bottom: 3%;
+}
+.container-fluid .dich-vu-doanh-nghiep > h1{
+    color: #555;
+    font-family: "Roboto", sans-serif;
+    text-align: center;
+    font-weight: bold;
+    padding-top: 3%;
+}
+.container-fluid .dich-vu-doanh-nghiep .inf-01{
+    width: 92%;
+    margin: 2% auto;
+}
+.container-fluid .dich-vu-doanh-nghiep .inf-01 > p{
+    color: #777;
+    font-family: "Roboto", sans-serif;
+    text-align: center;
+    font-size: 120%;
+}
+#navbar-btn-dichvu{
+    color: gold !important;
+}
+
