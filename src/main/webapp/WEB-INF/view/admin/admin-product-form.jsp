@@ -1,4 +1,6 @@
 
+<%@page import="org.hibernate.internal.build.AllowSysOut"%>
+<%@page import="nhom08.entity.Image"%>
 <%@page import="nhom08.entity.Product"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -11,6 +13,11 @@
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Lưu sản phẩm</title>
+<style type="text/css">
+	.error{
+color: red !important;
+}
+</style>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 <link rel="stylesheet" type="text/css"
@@ -32,7 +39,7 @@
 	request.setCharacterEncoding("UTF-8");
 	response.setCharacterEncoding("UTF-8");
 	%>
-	<div class="wrapper">
+<div class="wrapper">
 
 		<jsp:include page="partial/navbar.jsp"></jsp:include>
 		<jsp:include page="partial/asidebar.jsp"></jsp:include>
@@ -68,7 +75,7 @@
 								<div class="card-header bg-info" aria-expanded="true"
 									data-target=".collapse" data-card-widget="collapse"
 									style="cursor: pointer;">
-									<div class="card-title">Create Product Info</div>
+									<div class="card-title">Thông tin sản phẩm</div>
 									<div class="card-tools">
 										<button data-card-widget="collapse" type="button"
 											class="btn btn-tool">
@@ -214,23 +221,45 @@
 											value="<%=request.getParameter("productID")%>">
 										<div class="col-12">
 											<input type="file" name="files" multiple="multiple"
-												id="imageFile">
+												id="imageFile" accept=".jpg, .jpeg, .png" >
 											<div class="row border mt-3 mb-3 thumbnail-list"
 												style="min-height: 160px;">
-												<c:forEach items="${images}" var="image">
-													<img src="${pageContext.request.contextPath}${image.src}"
-														class="mr-3" width="150" height="150">
-												</c:forEach>
+												
 											</div>
 										</div>
-
+										<%if(request.getAttribute("images") != null) {%>
+										<div class="row">
+		
+											<% List<Image> images = (List<Image>) request.getAttribute("images"); 
+												for(Image image : images) {
+											%>
+											
+												<div class="col-2">
+													<div class="card">
+														<div class="card-body">
+															<img src="${pageContext.request.contextPath}<%= image.getSrc() %>"
+														class="mr-3" width="150" height="150">
+														</div>
+														
+														
+														<div class="card-footer text-center">
+															<a href="${pageContext.request.contextPath}\admin\image\delete?productID=${product.productID }&categoryID=${categoryID}&imageID=<%=image.getImageId() %>" class="btn btn-danger">Xóa</a>
+														</div>
+												
+													</div>
+													</div>
+													<%}%>
+										</div>
+										<%}%>
+												
+												
+										
+										
 										<input type="submit" class="btn btn-primary float-right" 
 											value="Save">
 									</form>
-								</div>
 								
-								
-								<%
+							<%
 								} else {
 								%>
 								<div>Bạn cần phải lưu Sản phẩm trước</div>
@@ -243,7 +272,8 @@
 				</div>
 			</div>
 		</div>
-		<jsp:include page="partial/footer.jsp"></jsp:include>
+		</div>
+<jsp:include page="partial/footer.jsp"></jsp:include>
 		<jsp:include page="partial/control-sidebar.jsp"></jsp:include>
 	</div>
 
@@ -256,12 +286,11 @@
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/js/OverlayScrollbars.min.js"></script>
 	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/6.0.0-beta.2/dropzone-min.js"></script>
+	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
-	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-
+<script type="text/javascript">
+		$(document).ready(function() {
 							$("#imageFile").change(function() {
 								$(".thumbnail-list").empty();
 								showThumbnail(this);

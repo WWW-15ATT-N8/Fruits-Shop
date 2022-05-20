@@ -15,9 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -89,6 +93,25 @@ public class AdminController {
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 	
+	public void loadUser(HttpServletRequest request, HttpSession session) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			User u = new User();
+			String phone = authentication.getName();
+			u = userService.getUserbyPhone(phone);
+			double total = 0.0;
+			
+				
+			session.setAttribute("USER",u);
+			session.setAttribute("total",total);
+		}
+		
+		if(session.getAttribute("category") == null) {
+			List<Category> categories = categoryService.getCategories();
+			session.setAttribute("category", categories);
+		}
+	}
+	
 	@GetMapping({"/product","/product/","/product/list"})
 	public String list(HttpServletRequest request, Model model) {
 		List<Product> products = null;
@@ -140,7 +163,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/product/create")
-	public String create(Model model) {
+	public String create(Model model, HttpServletRequest request, HttpSession session) {
+		loadUser(request, session);
 		List<Category> categories = categoryService.getCategories();
 		model.addAttribute("product", new Product());
 		model.addAttribute("categories", categories);
@@ -149,12 +173,17 @@ public class AdminController {
 	
 	@PostMapping("/product/save")
     public String saveProduct(
+    		Model model,
     		@ModelAttribute("categoryID") int categoryID,
-    		@Valid @ModelAttribute("product") Product product,  
+    		@ModelAttribute("product") @Valid Product product,  
     		BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) 
-			return "redirect:/admin/product/create";
-		System.out.println(categoryID);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("categories", categoryService.getCategories());
+			return "admin/admin-product-form";
+		}
+		
+		
+		
 		Category category = categoryService.getCategory(categoryID);
 		product.setCategory(category);
 		productService.saveProduct(product);
@@ -167,13 +196,11 @@ public class AdminController {
 		List<Category> categories = categoryService.getCategories();
 		model.addAttribute("categories", categories);
 		model.addAttribute("categoryID", product.getCategory().getCategoryID());
-		System.out.println(product.getImages());
 		model.addAttribute("product", product);
 		model.addAttribute("name", product.getName());
+
 		model.addAttribute("images", product.getImages());
-		byte[] ptext = product.getName().getBytes(ISO_8859_1); 
-		product.setName(new String(ptext, UTF_8)); 
-		System.out.println();
+//		System.out.println(product.getImages().get(0).getImageId());
 		return "admin/admin-product-form";
 	}
 	
@@ -224,7 +251,7 @@ public class AdminController {
 		PagedListHolder<Category> pagedListHolder = new PagedListHolder<Category>(categories);
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		pagedListHolder.setPage(page - 1);
-		pagedListHolder.setPageSize(3);
+		pagedListHolder.setPageSize(10);
 		
 //		System.out.println(pagedListHolder);
 		model.addAttribute("categories", pagedListHolder);
@@ -268,16 +295,17 @@ public class AdminController {
 		
 		return "UploadImg";
 	}
+	
+	@GetMapping(value="/image/delete")
+	public String deleteImage(@RequestParam(name="imageID") int imageID,@RequestParam(name="categoryID") int categoryID, @RequestParam(name="productID") int productID) {
+		
+		imageService.deleteImage(imageService.getImage(imageID)); 
+		return "redirect:/admin/product/update?productID="+productID;
+	}
 
 	@RequestMapping(value = "/image/save")  
 	public String upload(@RequestParam(name="files") MultipartFile[] files, @RequestParam(name="productID") int productID, HttpServletRequest request, Model model){  
 		Product product = productService.getProduct(productID);
-		List<Image> images = imageService.getImagesByProductID(productID);
-		if (images.size() != 0) {
-			for (Image image : images) {
-				imageService.deleteImage(image);
-			}
-		}
 
 		for (MultipartFile file : files) {
 			String src = PATH_STORE_ROOT+saveImage(file, request);
@@ -397,20 +425,18 @@ public class AdminController {
 	}
 	
 	@GetMapping({"/user","/user/","/user/list"})
-	private String listUser(HttpServletRequest request, Model model) {
+	private String listUser(HttpServletRequest request, Model model, HttpSession session) {
 		List<User> users  = new ArrayList<User>();
 		int roleID = 0;
 		if (request.getParameter("fullName") != null || request.getParameter("email") != null ||
-				request.getParameter("phone") != null || request.getParameter("address") != null
+				request.getParameter("phone") != null
 				|| request.getParameter("roleID") != null) {
 			String fullName = request.getParameter("fullName");
 			String email = request.getParameter("email");
 			String phone = request.getParameter("phone");
-			String address = request.getParameter("address");
 			roleID = Integer.parseInt(request.getParameter("roleID"));
 			
-			System.out.println("start filter");
-			List<User> usersTemp = userService.getUsersFilter(fullName, address, phone, email);
+			List<User> usersTemp = userService.getUsersFilter(fullName, phone, email);
 			System.out.println("start for"+ usersTemp);
 			if(roleID != -1) {
 				for (User user : usersTemp) {
@@ -425,7 +451,7 @@ public class AdminController {
 			}
 			
 			
-			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?fullName="+fullName+"&email="+email+"&phone="+phone+"&address="+address+"&");
+			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?fullName="+fullName+"&email="+email+"&phone="+phone+"&");
 		} else {
 			users = userService.getUsers();
 			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?");
@@ -435,6 +461,14 @@ public class AdminController {
 			users = new ArrayList<User>();
 		}
 		
+		
+		User user = (User) session.getAttribute("USER");
+		for (int i = 0; i < users.size(); i++) {
+			if(users.get(i).getUserID() == user.getUserID()) {
+				users.remove(i);
+				break;
+			}
+		}
 		List<Role> roles = roleService.getRoles(); 
 		System.out.println(roles);
 		model.addAttribute("roles", roles);
@@ -442,7 +476,7 @@ public class AdminController {
 		PagedListHolder<User> pagedListHolder = new PagedListHolder<User>(users);
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		pagedListHolder.setPage(page - 1);
-		pagedListHolder.setPageSize(3);
+		pagedListHolder.setPageSize(10);
 		
 //		System.out.println(pagedListHolder);
 		model.addAttribute("users", pagedListHolder);
@@ -460,14 +494,11 @@ public class AdminController {
 	
 	@PostMapping("/user/save")
     public String saveUser( @RequestParam("roleID") int roleID, 
+    		Model model,
     		 @RequestParam("password") String password, @Valid @ModelAttribute("user") User user, BindingResult bindingResult ) {
 		if (bindingResult.hasErrors()) {
-			System.out.println("lỗi mẹ rồi: "+ user);
-			bindingResult
-			.getFieldErrors()
-			.stream()
-			.forEach(f -> System.out.println(f.getField() + ": " + f.getDefaultMessage()));
-			return "redirect:/admin/user/create";
+			model.addAttribute("roles", roleService.getRoles());
+			return "admin/admin-user-form";
 		}
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), roleService.getRole(roleID));
@@ -521,6 +552,7 @@ public class AdminController {
 		int customerRegis = getCustomerRegis();
 		int lowStockProduct = getLowStockProduct();
 		List<Order> lastOrders = getLastOrder(orders, 5);
+		System.out.println(lastOrders);
 		List<Long> dates = getLastDate(10);
 		
 		List<Double> priceInDay = new ArrayList<Double>();
@@ -569,8 +601,9 @@ public class AdminController {
 
 	private List<Order> getLastOrder(List<Order> orders, int numOrder) {
 		List<Order> lastOrder = new ArrayList<Order>();
+		System.out.println("first order" + lastOrder);
 		for (int i = orders.size()-1; i >= 0; i--) {
-			if (orders.size() <= 5) {
+			if (lastOrder.size() < numOrder) {
 				lastOrder.add(orders.get(i));
 			}
 		}

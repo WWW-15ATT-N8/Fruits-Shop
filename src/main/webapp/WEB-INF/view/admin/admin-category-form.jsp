@@ -6,6 +6,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Lưu loại sản phẩm</title>
+<style type="text/css">
+	.error {
+		color: red !important;
+	}
+</style>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 <link rel="stylesheet" type="text/css"

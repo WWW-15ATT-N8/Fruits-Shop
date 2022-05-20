@@ -175,7 +175,8 @@
 													<form
 														action="${pageContext.request.contextPath}/admin/order/updatestatus?${_csrf.parameterName}=${_csrf.token}"
 														method="post">
-														<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+														<input type="hidden" name="${_csrf.parameterName}"
+															value="${_csrf.token}" />
 														<input type="hidden" name="orderID"
 															value="${order.orderID}"> <select
 															class="form-control" name="statusID"
