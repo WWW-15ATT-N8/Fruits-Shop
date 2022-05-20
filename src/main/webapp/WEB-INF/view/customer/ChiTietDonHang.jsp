@@ -86,26 +86,26 @@
 			  <tbody>
 			  	<c:forEach items="${ORDER.order_Details}" var="detail">
 			  		<tr>
-				      <td>${detail.product.name}</td>
+				      <td  style="font-weight: 600;">${detail.product.name}</td>
 				      <td class="donhang-btn"><fmt:formatNumber value = "${detail.price}" type = "number" maxFractionDigits = "0"/> VND</td>
 				      <td style="text-align: center;">${detail.amount}</td>
 				      <td class="donhang-btn"><fmt:formatNumber value = "${detail.price * detail.amount}" type = "number" maxFractionDigits = "0"/> VND</td>
 				    </tr>
 			  	</c:forEach>
 			  	<tr  style="border-top: 3px solid #e5e8eb;"> 
-			  		<td colspan="2">Tổng số phụ</td>
+			  		<td colspan="2">Tổng số phụ:</td>
 			  		<td colspan="2" class="donhang-btn"><fmt:formatNumber value = "<%= o.getTongTien()%>" type = "number" maxFractionDigits = "0"/> VND</td>
 			  	</tr>    
 			  	<tr> 
-			  		<td colspan="2">Giảm giá</td>
+			  		<td colspan="2">Giảm giá:</td>
 			  		<td colspan="2" class="donhang-btn"><fmt:formatNumber value = "<%= o.getTongTien()*o.getDiscount()%>" type = "number" maxFractionDigits = "0"/> VND</td>
 			  	</tr>
 			  	<tr> 
-			  		<td colspan="2">VAT</td>
-			  		<td colspan="2" class="donhang-btn"><fmt:formatNumber value = "<%= o.getTongTien()*0.8%>" type = "number" maxFractionDigits = "0"/> VND</td>
+			  		<td colspan="2">VAT (8%):</td>
+			  		<td colspan="2" class="donhang-btn"><fmt:formatNumber value = "<%= o.getTongTien()*0.08%>" type = "number" maxFractionDigits = "0"/> VND</td>
 			  	</tr>  
 			  	<tr> 
-			  		<td colspan="2">Phí vận chuyển</td>
+			  		<td colspan="2">Phí vận chuyển:</td>
 			  		<td colspan="2" class="donhang-btn"><fmt:formatNumber value = "0" type = "number" maxFractionDigits = "0"/> VND</td>
 			  	</tr> 		  	
 			  </tbody>

@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Order_Detail")
@@ -33,8 +35,12 @@ public class Order_Detail implements Serializable {
 	@JoinColumn(name = "productID")
 	private Product product;
 	
+	@NotNull(message = "Số lượng không được trống")
+    @Min(value = 0, message = "Số lượng không được âm")
 	private int amount;
 	
+	@NotNull(message = "Giá không được trống")
+    @Min(value = 0, message = "Giá không được âm")
 	private double price;
 	
 	

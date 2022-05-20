@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Đăng ký - Vinfruts</title>
+	<title>Đổi mật khẩu - Vinfruts</title>
 	<meta name=”viewport” content=” width=device-width, initial-scale=1″>
 	<!-- <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" /> -->
 	<!-- <script src="../bootstrap/jquery/jquery-3.6.0.min.js"></script>
@@ -24,7 +24,7 @@
 	        <script src="../js/search.js"></script>  -->
 <style type="text/css">
 #navbar-btn-home{
-    color: white !important;
+    color: gold !important;
 }
 #form-login{
 			min-height: 350px;
@@ -34,44 +34,54 @@
 <body>
 	<div class="wrapper">
 
-		<jsp:include page="customer/Navbar.jsp"></jsp:include>
+		<jsp:include page="Navbar.jsp"></jsp:include>
 
 
 		<div class="container-fluid" id="form-login">
 			<div class="row" id="form-body">
-				<form:form modelAttribute="Account" action="${pageContext.request.contextPath}/registration/processRegistrationForm"
-				class="login100-form validate-form" style="background: whitesmoke;border-radius: 30px;padding: 10px 40px;margin: auto;">
-				 	<center><h3>Đăng ký</h3></center>	
-					<form:input  path="accountID" type="hidden" value="0"/>
-					<form:input  path="enabled" type="hidden" value="1"/>
-					<div class="row">
+				<form  method="POST" action="${pageContext.request.contextPath}/user/doi-mat-khau/save?${_csrf.parameterName}=${_csrf.token}"
+				style="background: whitesmoke;border-radius: 30px;padding: 10px 40px;margin: auto; min-width: 500px;">
+				<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+					<center><h3>Đổi mật khẩu</h3></center>
+					<c:if test="${changpasswordSuccess != null}">
+						<div class="alert alert-success col-xs-offset-1 col-xs-10" style="text-align: center;">${changpasswordSuccess}</div>
+					</c:if>
+					 <div class="row">
                         <div class="col-12">
-                            <label>Số điện thoại: </label><br/>
-                            <form:input  path="phone" class="tt-name" type="text" placeholder="0xxx-xxx-xxx" />
-                            <br><form:errors path="phone"/>
+                            <label>Mật khẩu cũ: </label><br/>
+                            <input type="password" name="oldpassword" class="tt-name"   placeholder="nhập mật khẩu cũ" >
+                            <%-- <br><form:errors path="password"/> --%>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label>Mật khẩu: </label><br/>
-                            <form:input path="password" class="tt-name" type="password"  placeholder="nhập mật khẩu" />
-                            <br><form:errors path="password"/>
+                            <label>Mật khẩu mới: </label><br/>
+                            <input type="password" name="newpassword" class="tt-name"   placeholder="nhập mật khẩu mới" >
+                            <%-- <br><form:errors path="password"/> --%>
                         </div>
                     </div>
-					<c:if test="${registrationError != null}">
-						<div class="alert alert-danger col-xs-offset-1 col-xs-10">
-							${registrationError}</div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Nhập lại mật khẩu: </label><br/>
+                            <input type="password" name="confirmpassword" class="tt-name"   placeholder="xác nhận mật khẩu" >
+                            <%-- <br><form:errors path="password"/> --%>
+                        </div>
+                    </div>
+					<c:if test="${changpasswordError != null}">
+						<div class="alert alert-danger col-xs-offset-1 col-xs-10"  style="text-align: center;">${changpasswordError}</div>
 					</c:if>
                      <div class="row">
                         <div class="col-4">
-                            <input type="submit" value="Đăng kí" id="login">
+                            <input type="submit" value="Đổi mật khẩu" id="login">
                         </div>
                     </div>
-				</form:form>
+                   <input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
+				</form>
 			</div>
 		</div>
 
-		<jsp:include page="customer/Footer.jsp"></jsp:include>
+		<jsp:include page="Footer.jsp"></jsp:include>
 
 	</div>
 </body>

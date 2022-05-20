@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.jsf.FacesContextUtils;
 
 
@@ -38,15 +39,15 @@ public class Order implements Serializable {
 	private double total;
 	
 	@Column(name = "shipAddress")
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Địa chỉ giao hàng không được trống")
 	private String shipAddress;
 	
-	@NotNull(message = "is required")
+	@NotNull(message = "Số điện thoại giao hàng không được trống")
 	@Pattern(regexp = "^0[0-9]{9}", message = "* Số điện thoại có đúng 10 kí tự số")
 	private String shipPhone;
 	
 	private String comment;
+	
 	private float discount;
 	
 	@ManyToOne

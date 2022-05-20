@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity(name = "Accounts")
 @Table(name = "Accounts")
@@ -22,8 +24,14 @@ public class Account implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int accountID;
+	
+	@NotNull(message = "* Số điện thoại không được để trống")
+	@Pattern(regexp = "^0[0-9]{9}", message = "* Số điện thoại phải có 10 kí tự bắt đầu bằng 0")
 	private String phone;
+	
+	@NotNull(message = "* Mật khẩu không được để trống")
 	private String password;
+	
 	private int enabled;
 
 	@ManyToOne
@@ -36,15 +44,14 @@ public class Account implements Serializable {
 	public Account() {
 		super();
 	}
+	
 
-	public Account(int accountID, String phone, String password, int enabled, Role role, User user) {
+	public Account(String phone, String password, Role role) {
 		super();
-		this.accountID = accountID;
 		this.phone = phone;
 		this.password = password;
-		this.enabled = enabled;
+		this.enabled = 1;
 		this.role = role;
-		this.user = user;
 	}
 
 	public int getAccountID() {
@@ -55,15 +62,6 @@ public class Account implements Serializable {
 		this.accountID = accountID;
 	}
 	
-	
-
-	public Account(String phone, String password, int enabled, Role role) {
-		super();
-		this.phone = phone;
-		this.password = password;
-		this.enabled = enabled;
-		this.role = role;
-	}
 
 	public String getPhone() {
 		return phone;

@@ -20,6 +20,7 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Navbar.css" type="text/css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Footer.css" type="text/css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Home.css" type="text/css">
@@ -59,28 +60,38 @@
 								</div>
 							</div>
 						</c:if>
-						<form:form action="" style="margin: auto;width: 80%;">
+						<c:if test="${updateMessage != null}">
+							<div class="col-12">
+								<div class="alert alert-success col-xs-offset-1 col-xs-10" style="text-align: center;">
+									${updateMessage}
+								</div>
+							</div>
+						</c:if>
+						<form:form action="${pageContext.request.contextPath}/user/thong-tin-ca-nhan/update" style="margin: auto;width: 80%;"
+								method="post" modelAttribute="UserUpdate">
+							   <form:input type="hidden"  value="<%= u.getUserID()%>"  path="userID"/>
+							   <form:input type="hidden"  value="<%= u.getPhone()%>" path="phone"/>
 							   <div class="form-group">
 							    <label for="exampleInputEmail1">Họ và tên:</label>
-							    <input type="text" class="form-control" placeholder="nhập họ và tên">
-							    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+							    <form:input type="text" class="form-control" placeholder="nhập họ và tên" path="fullName" />
+							    <br><form:errors  cssClass="error" class="form-text text-muted" path="fullName" />
 							  </div>
-
 							  <div class="form-group">
 							    <label for="exampleInputEmail1">Số điện thoại:</label>
-							    <input type="text" class="form-control" value="<%= u.getPhone()%>" disabled=>
+							    <input type="text" class="form-control"  disabled id="info-phone" value="<%= u.getPhone()%>">
+							    <br>
 							  </div>
 							  
 							  <div class="form-group">
 							    <label for="exampleInputEmail1">Địa chỉ email:</label>
-							    <input type="email" class="form-control" placeholder="nhập dịa chỉ email">
-							    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+							    <form:input type="email" class="form-control" placeholder="nhập dịa chỉ email"  path="email"/>
+							    <br><form:errors  cssClass="error" class="form-text text-muted" path="email" />
 							  </div>
 							  
 							  <div class="form-group">
 							    <label for="exampleInputEmail1">Địa chỉ:</label>
-							    <input type="text" class="form-control" placeholder="nhập dịa chỉ">
-							    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+							    <form:input type="text" class="form-control" placeholder="nhập địa chỉ"  path="address"/>
+							    <br><form:errors  cssClass="error" class="form-text text-muted" path="address" />
 							  </div>
 							  
 							   <div class="form-group">

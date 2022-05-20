@@ -23,6 +23,9 @@
 	        <script src="../js/regex.js"></script>
 	        <script src="../js/search.js"></script>  -->
 <style type="text/css">
+#navbar-btn-home{
+    color: white !important;
+}
 #form-login{
 			min-height: 350px;
 }

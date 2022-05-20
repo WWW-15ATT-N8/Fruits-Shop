@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity(name ="Images")
 @Table(name ="Images")
@@ -22,6 +23,8 @@ public class Image implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String imageID;
+	
+	@NotNull(message = "Đường dẫn không được để trống")
 	@Column(name = "src")
 	private String src;
 	

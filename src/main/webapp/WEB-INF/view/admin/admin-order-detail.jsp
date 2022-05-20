@@ -33,6 +33,7 @@ request.setCharacterEncoding("UTF-8");
 response.setCharacterEncoding("UTF-8");
 %>
 <body>
+<div class="wrapper">
 	<jsp:include page="partial/navbar.jsp"></jsp:include>
 	<jsp:include page="partial/asidebar.jsp"></jsp:include>
 	<%Order o = (Order)request.getAttribute("order"); %>
@@ -78,8 +79,8 @@ response.setCharacterEncoding("UTF-8");
 									<div class="col-6">
 										<p><b>Mã đơn hàng</b>: <%= o.getOrderID()%></p>
 										<p><b>Ngày tạo</b>: <%= o.getCreatedDate()%></p>
-										<p><b>Địa chỉ giao hàng</b>: <%= o.getShipAddress()%></p>
-										<p><b>Số điện thoại giao hàng</b>: <%= o.getShipAddress()%></p>
+										<p><b>Địa chỉ giao hàng</b>: <%= o.getShipAddress().toUpperCase()%></p>
+										<p><b>Số điện thoại giao hàng</b>: <%= o.getShipPhone()%></p>
 									</div>
 									<div class="col-6">
 										<%User u = o.getUser();%>
@@ -154,6 +155,7 @@ response.setCharacterEncoding("UTF-8");
 	</div>
 	<jsp:include page="partial/footer.jsp"></jsp:include>
 	<jsp:include page="partial/control-sidebar.jsp"></jsp:include>
+</div>
 		<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript"

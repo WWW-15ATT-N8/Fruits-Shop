@@ -8,10 +8,9 @@
 </head>
 <body>
 	<footer class="main-footer">
-    <strong>Copyright &copy; 2014-2022 <a href=""">Fruit</a>.</strong>
-    All rights reserved.
+    <strong>Môn JAVA WWW Nhóm 8: <a href="${pageContext.request.contextPath}/">Fruits Shop</a>.</strong>
     <div class="float-right d-none d-sm-inline-block">
-      <b>Version</b> 3.2.0
+
     </div>
   </footer>
 </body>

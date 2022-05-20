@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity(name = "Carts")
 @Table(name = "Carts")
@@ -40,6 +42,8 @@ public class Cart implements Serializable {
 	private int amount;
 	
 
+	@NotNull(message = "Số lượng không được trống")
+    @Min(value = 0, message = "Số lượng không được âm")
 	public int getAmount() {
 		return amount;
 	}

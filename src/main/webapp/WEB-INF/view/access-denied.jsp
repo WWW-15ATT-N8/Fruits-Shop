@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Lỗi - Vinfruts</title>
+	<title>Vinfruts</title>
 	<meta name=”viewport” content=” width=device-width, initial-scale=1″>
 	<!-- <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" /> -->
 	<!-- <script src="../bootstrap/jquery/jquery-3.6.0.min.js"></script>
@@ -22,7 +22,14 @@
 	        <script src="../js/functionsHandle.js"></script>
 	        <script src="../js/regex.js"></script>
 	        <script src="../js/search.js"></script>  -->
-
+<style type="text/css">
+#navbar-btn-home{
+    color: white !important;
+}
+#denied{
+			min-height: 350px;
+}
+</style>
 </head>
 <body>
 	<div class="wrapper">
@@ -30,7 +37,7 @@
 		<jsp:include page="customer/Navbar.jsp"></jsp:include>
 
 
-		<div class="container-fluid">
+		<div class="container-fluid" id="denied">
 			<div class="row">
                 <!-- Begin Page Content -->
                 <div class="container-fluid">

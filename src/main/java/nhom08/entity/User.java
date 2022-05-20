@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity(name = "Users")
 @Table(name = "Users")
@@ -20,9 +21,13 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userID;
+	@NotNull(message = "* Tên không được để trống")
 	private String fullName;
+	@NotNull(message = "* Địa chỉ không được để trống")
 	private String address;
+	@NotNull(message = "* Email không được để trống")
 	private String email;
+	@NotNull(message = "* Số điện thoại không được để trống")
 	private String phone;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

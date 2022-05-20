@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity(name = "Products")
 @Table(name = "Products")
@@ -27,14 +30,33 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int productID;
+	
+	@NotNull(message = "Tên thiệp không được để trống")
 	private String name;
+	
+	@NotNull(message = "Giá không được trống")
+    @Min(value = 0, message = "Giá sản phẩm không được âm")
 	private double price;
+	
+	@NotNull(message = "Giá cũ không được trống")
+    @Min(value = 0, message = "Giá cũ không được âm")
 	private double oldPrice;
+	
 	private String description;
+	
 	private String detail;
+	
+	@NotNull(message = "Số lượng không được trống")
+    @Min(value = 0, message = "Số lượng không được âm")
 	private int stock;
+	
+	@NotNull(message = "Giảm giá không được trống")
+    @Min(value = 0, message = "Giảm giá không được âm")
+	@Max(value = 100, message = "Giảm giá phải nhỏ hơn 100")
 	private double discount;
+	
 	private boolean newProduct;
+	
 	private boolean bestSaler;
 	
 	@ManyToOne

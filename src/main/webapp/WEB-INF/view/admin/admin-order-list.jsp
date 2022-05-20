@@ -31,6 +31,7 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.min.css">
 </head>
 <body>
+<div class="wrapper">
 	<jsp:include page="partial/navbar.jsp"></jsp:include>
 	<jsp:include page="partial/asidebar.jsp"></jsp:include>
 	<div class="content-wrapper">
@@ -161,7 +162,8 @@
 												<td><fmt:formatNumber value = "${ order.total }" type = "number" maxFractionDigits = "0"/> VND</td>
 												<td><fmt:formatNumber value = "${ order.discount }" type = "number" maxFractionDigits = "0"/> VND</td>
 												<td style="margin: auto;">
-													<form action="${pageContext.request.contextPath}/admin/order/updatestatus/" method="post">
+													<form action="${pageContext.request.contextPath}/admin/order/updatestatus?${_csrf.parameterName}=${_csrf.token}" method="post">
+														<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
 														<input type="hidden" name="orderID" value="${order.orderID}">
 														<select class="form-control" name="statusID" style="width: 100%; margin-bottom:2%;">
 															<c:forEach items="${status}" var="status">
@@ -204,6 +206,7 @@
 	</div>
 	<jsp:include page="partial/footer.jsp"></jsp:include>
 	<jsp:include page="partial/control-sidebar.jsp"></jsp:include>
+ </div>
 		<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript"

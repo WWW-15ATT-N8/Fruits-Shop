@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity(name="Roles")
 @Table(name ="Roles")
@@ -20,7 +21,10 @@ public class Role implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int roleID;
+	
+	@NotNull(message = "* Tên không được để trống")
 	private String title;
+	
 	private String description;
 	
 	@OneToMany(mappedBy = "role" ,fetch = FetchType.LAZY, cascade=CascadeType.ALL)

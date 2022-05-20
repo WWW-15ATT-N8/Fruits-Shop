@@ -314,24 +314,19 @@ public class AdminController {
 				dieukien += " statusID =" + statusID;
 			}
 			
-			if(filter == 1){
-				if(dieukien.equals("where "))
-					dieukien = " order by createdAt desc";
-				dieukien += " order by createdAt desc";
-			} else if(filter == 2){
-				if(dieukien.equals("where "))
-					dieukien = " order by total asc";
-				dieukien += " order by total asc";
-			} else{
-				if(dieukien.equals("where "))
-					dieukien = " order by total desc";
-				dieukien += " order by total desc";
-			}
 			
 			if(dieukien.equals("where ")) 
 				orders =  orderService.getOrdersByDK(" order by createdAt desc");
-			else 
+			else {
+				if(filter == 1)
+					dieukien += " order by createdAt desc";
+				 else if(filter == 2)
+					 dieukien += " order by total asc";
+				 else
+					 dieukien += " order by total desc";
 				orders =  orderService.getOrdersByDK(dieukien);
+			}
+				
 			
 			model.addAttribute("url" , PATH_CONTEXT + "/admin/order/list?statusID="+String.valueOf(statusID)+"&filter=" + String.valueOf(filter) + "&phone=" +phone);
 		} else {
@@ -449,7 +444,7 @@ public class AdminController {
     public String saveUser(@ModelAttribute("user") User user, @RequestParam("roleID") int roleID, 
     		@RequestParam("password") String password) {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
-		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), 1, roleService.getRole(roleID));
+		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), roleService.getRole(roleID));
 		accountService.saveAccount(account);
 		user.setAccount(accountService.getAccount(user.getPhone()));
 		userService.saveUser(user);

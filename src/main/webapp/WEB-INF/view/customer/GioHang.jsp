@@ -55,8 +55,9 @@
 		<div class="container-fluid">
 			<div class="giohang">
 				<div class="giohang-left">
-				<c:url var="updateCart" value="/user/cart/updatecart"></c:url>
-					<form id="form-gh" action="${updateCart}" method="get">
+				<c:url var="updateCart" value="/user/cart/updatecart?${_csrf.parameterName}=${_csrf.token}"></c:url>
+					<form id="form-gh" action="${updateCart}" method="post">
+						<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
 						<table>
 							<thead>
 							<%

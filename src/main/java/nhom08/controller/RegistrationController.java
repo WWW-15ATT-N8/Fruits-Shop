@@ -50,8 +50,6 @@ public class RegistrationController {
 		
 		String encodedPassword = passwordEncoder.encode(password);
 		encodedPassword = "{bcrypt}" + encodedPassword;
-		System.out.println(encodedPassword);
-		System.out.println(account);
 		
 		account.setAccountID(0);
 		account.setEnabled(1);
