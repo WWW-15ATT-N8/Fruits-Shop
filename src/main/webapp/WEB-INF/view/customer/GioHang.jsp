@@ -56,7 +56,7 @@
 			<div class="giohang">
 				<div class="giohang-left">
 				<c:url var="updateCart" value="/user/cart/updatecart"></c:url>
-					<form id="form-gh" action="${updateCart}" method="post">
+					<form id="form-gh" action="${updateCart}" method="get">
 						<table>
 							<thead>
 							<%

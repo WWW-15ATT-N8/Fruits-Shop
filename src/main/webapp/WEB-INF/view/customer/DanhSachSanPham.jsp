@@ -89,22 +89,9 @@
 							
 					%>
 					
-					<%-- <%
-						int size = (int)request.getAttribute("size_product");
-						int pagenum = (size+7)/8;
-						for(int i = 1 ; i <= pagenum ; i++){
-							out.println("<c: var = \"productCategory\" value =\"/category/" + (int)request.getAttribute("category.categoryID") 
-								+ "\"> <c:param name=\"page\" value\" "+ i +"\" />");
-							if(i == (int)request.getAttribute("page"))
-								out.println("<a href=\"productCategory\" class= \"active\">"+ i +"</a>");
-							else
-								out.println("<a href=\"productCategory\" >"+ i +"</a>");
-						}
-							
-					%> --%>
 					<a href="<% 
 								int tmp2 = ((int)request.getAttribute("size_product")+7) /8;
-								if((int)request.getAttribute("page") < tmp2) out.println("/fruits-shop/category/" + category.getCategoryID() + "/page/"+ ((int)request.getAttribute("page")+1));
+								if((int)request.getAttribute("page") < tmp2) out.println("/fruits-shop/category/id=" + category.getCategoryID() + "/page="+ ((int)request.getAttribute("page")+1));
 								else out.println("");%> ">»</a>
 			 	</div>
 			</div>

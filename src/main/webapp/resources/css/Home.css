@@ -30,6 +30,9 @@
     margin: 5vh auto;
     text-align: left;
 }
+#form-body .row{
+	margin: 1vh auto;
+}
 #row-man, #row-woman{
 	display: inline-block;
 	 white-space: nowrap;

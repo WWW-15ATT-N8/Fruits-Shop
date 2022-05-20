@@ -44,9 +44,9 @@ public class CategoryController {
 		model.addAttribute("size_product", cnt);
 		model.addAttribute("page", pages);
 		if (pages == 1)
-			return "redirect:/category/" + categoryID;
+			return "redirect:/category/id=" + categoryID;
 		if (products.size() == 0)
-			return "redirect:/category/" + categoryID;
+			return "redirect:/category/id=" + categoryID;
 		return "customer/DanhSachSanPham";
 	}
 
