@@ -1,3 +1,4 @@
+<%@page import="nhom08.entity.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
@@ -21,6 +22,8 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.min.css">
 </head>
 <body class="font-sans antialiased hold-transition sidebar-mini">
+	<%User u = (User)session.getAttribute("USER");%>
+	
 	<div class="wrapper">
 		<jsp:include page="partial/navbar.jsp"></jsp:include>
 		<jsp:include page="partial/asidebar.jsp"></jsp:include>
@@ -64,6 +67,7 @@
 									</div>
 								</div>
 								<div class="card-body collapse show">
+								
 									<form modelAttribute="user">
 										<div class="row">
 											<div class="col-6">
@@ -80,7 +84,8 @@
 															Tất cả ~~</option>
 														<c:forEach items="${roles}" var="role">
 															<option
-																${ roleID == role.roleID ? 'selected="selected"' : '' }
+																
+																${ roleID == role.roleID ? 'selected="selected"' : ''} 
 																value="${ role.roleID }">${ role.title }</option>
 														</c:forEach>
 													</select>
@@ -156,7 +161,7 @@
 																style="width: 100%; margin-bottom: 2%;">
 
 																<c:forEach items="${roles}" var="role">
-																	<option
+																	<option  
 																		${ user.account.role.roleID == role.roleID ? 'selected="selected"' : '' }
 																		value="${ role.roleID }">${ role.title }</option>
 																</c:forEach>

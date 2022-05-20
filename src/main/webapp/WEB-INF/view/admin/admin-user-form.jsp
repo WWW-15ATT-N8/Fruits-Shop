@@ -12,6 +12,11 @@
 <meta charset="UTF-8" />
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Tạo tài khoản</title>
+<style type="text/css">
+	.error {
+		color : red !important
+	}
+</style>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 <link rel="stylesheet" type="text/css"

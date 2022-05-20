@@ -196,13 +196,11 @@ public class AdminController {
 		List<Category> categories = categoryService.getCategories();
 		model.addAttribute("categories", categories);
 		model.addAttribute("categoryID", product.getCategory().getCategoryID());
-		System.out.println(product.getImages());
 		model.addAttribute("product", product);
 		model.addAttribute("name", product.getName());
+
 		model.addAttribute("images", product.getImages());
-		byte[] ptext = product.getName().getBytes(ISO_8859_1); 
-		product.setName(new String(ptext, UTF_8)); 
-		System.out.println();
+//		System.out.println(product.getImages().get(0).getImageId());
 		return "admin/admin-product-form";
 	}
 	
@@ -253,7 +251,7 @@ public class AdminController {
 		PagedListHolder<Category> pagedListHolder = new PagedListHolder<Category>(categories);
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		pagedListHolder.setPage(page - 1);
-		pagedListHolder.setPageSize(3);
+		pagedListHolder.setPageSize(10);
 		
 //		System.out.println(pagedListHolder);
 		model.addAttribute("categories", pagedListHolder);
@@ -297,16 +295,17 @@ public class AdminController {
 		
 		return "UploadImg";
 	}
+	
+	@GetMapping(value="/image/delete")
+	public String deleteImage(@RequestParam(name="imageID") int imageID,@RequestParam(name="categoryID") int categoryID, @RequestParam(name="productID") int productID) {
+		
+		imageService.deleteImage(imageService.getImage(imageID)); 
+		return "redirect:/admin/product/update?productID="+productID;
+	}
 
 	@RequestMapping(value = "/image/save")  
 	public String upload(@RequestParam(name="files") MultipartFile[] files, @RequestParam(name="productID") int productID, HttpServletRequest request, Model model){  
 		Product product = productService.getProduct(productID);
-		List<Image> images = imageService.getImagesByProductID(productID);
-		if (images.size() != 0) {
-			for (Image image : images) {
-				imageService.deleteImage(image);
-			}
-		}
 
 		for (MultipartFile file : files) {
 			String src = PATH_STORE_ROOT+saveImage(file, request);
@@ -426,7 +425,7 @@ public class AdminController {
 	}
 	
 	@GetMapping({"/user","/user/","/user/list"})
-	private String listUser(HttpServletRequest request, Model model) {
+	private String listUser(HttpServletRequest request, Model model, HttpSession session) {
 		List<User> users  = new ArrayList<User>();
 		int roleID = 0;
 		if (request.getParameter("fullName") != null || request.getParameter("email") != null ||
@@ -437,7 +436,6 @@ public class AdminController {
 			String phone = request.getParameter("phone");
 			roleID = Integer.parseInt(request.getParameter("roleID"));
 			
-			System.out.println("start filter");
 			List<User> usersTemp = userService.getUsersFilter(fullName, phone, email);
 			System.out.println("start for"+ usersTemp);
 			if(roleID != -1) {
@@ -463,6 +461,14 @@ public class AdminController {
 			users = new ArrayList<User>();
 		}
 		
+		
+		User user = (User) session.getAttribute("USER");
+		for (int i = 0; i < users.size(); i++) {
+			if(users.get(i).getUserID() == user.getUserID()) {
+				users.remove(i);
+				break;
+			}
+		}
 		List<Role> roles = roleService.getRoles(); 
 		System.out.println(roles);
 		model.addAttribute("roles", roles);
@@ -470,7 +476,7 @@ public class AdminController {
 		PagedListHolder<User> pagedListHolder = new PagedListHolder<User>(users);
 		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
 		pagedListHolder.setPage(page - 1);
-		pagedListHolder.setPageSize(3);
+		pagedListHolder.setPageSize(10);
 		
 //		System.out.println(pagedListHolder);
 		model.addAttribute("users", pagedListHolder);
@@ -546,6 +552,7 @@ public class AdminController {
 		int customerRegis = getCustomerRegis();
 		int lowStockProduct = getLowStockProduct();
 		List<Order> lastOrders = getLastOrder(orders, 5);
+		System.out.println(lastOrders);
 		List<Long> dates = getLastDate(10);
 		
 		List<Double> priceInDay = new ArrayList<Double>();
@@ -596,8 +603,9 @@ public class AdminController {
 
 	private List<Order> getLastOrder(List<Order> orders, int numOrder) {
 		List<Order> lastOrder = new ArrayList<Order>();
+		System.out.println("first order" + lastOrder);
 		for (int i = orders.size()-1; i >= 0; i--) {
-			if (orders.size() <= 5) {
+			if (lastOrder.size() < numOrder) {
 				lastOrder.add(orders.get(i));
 			}
 		}

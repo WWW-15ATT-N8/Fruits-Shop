@@ -110,7 +110,7 @@ response.setCharacterEncoding("UTF-8");
 			<section class="content">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-6">
+						<div class="col-12">
 							<div class="card">
 								<div class="card-header">
 									<i class="fa-solid fa-chart-pie"></i> Biểu đồ doanh thu
