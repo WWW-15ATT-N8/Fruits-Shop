@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				"/product",
 				"/category/**",
 				"/product/id=*",
+				"/dichvu",
 				"/registration/**"
 		};
 	    

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +45,17 @@ public class HomeController {
 	@RequestMapping({ "/", "/trang-chu", "/home" })
 	public String home(HttpServletRequest request, HttpSession session, Model theModel) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null) {
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
 			User u = new User();
 			String phone = authentication.getName();
 			u = userService.getUserbyPhone(phone);
+			List<Cart> carts  =  cartService.getCartsbyUserID(u.getUserID());
+			double total = 0.0;
+			for(Cart c : carts)
+				total += c.getAmount()*c.getProduct().getPrice();
+				
 			session.setAttribute("USER",u);
+			session.setAttribute("total",total);
 		}
 		
 		if(session.getAttribute("category") == null) {
@@ -98,4 +105,5 @@ public class HomeController {
 	public String showRoboto() {
 		return "redirect:/";
 	}
+	
 }

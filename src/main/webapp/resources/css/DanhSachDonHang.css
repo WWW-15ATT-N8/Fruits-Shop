@@ -1,0 +1,33 @@
+@charset "UTF-8";
+*{
+    margin: 0;
+    padding: 0;
+}
+.container-fluid:nth-child(2){
+    text-align: center;
+}
+.container-fluid{
+    padding: 0 !important;
+}
+#danhsachdonhang{
+	min-height: 350px;
+}
+#danhsachdonhang .row{
+	background-color: #fafafa;
+	border: 3px solid #e5e8eb;
+    border-radius: 10px;
+}
+.container-fluid .row
+{
+    max-width: 1222.5px;
+    margin: 5vh auto;
+    text-align: left;
+}
+
+#lichsu-donhang{
+	margin: auto;
+	width: 90%;
+}
+#lichsu-donhang .donhang-btn{
+	text-align: right !important;
+}

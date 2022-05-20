@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Đăng nhập - Vinfruts</title>
+	<title>Lỗi - Vinfruts</title>
 	<meta name=”viewport” content=” width=device-width, initial-scale=1″>
 	<!-- <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" /> -->
 	<!-- <script src="../bootstrap/jquery/jquery-3.6.0.min.js"></script>
@@ -22,11 +22,7 @@
 	        <script src="../js/functionsHandle.js"></script>
 	        <script src="../js/regex.js"></script>
 	        <script src="../js/search.js"></script>  -->
-<style type="text/css">
-#form-login{
-			min-height: 350px;
-}
-</style>
+
 </head>
 <body>
 	<div class="wrapper">
@@ -34,47 +30,18 @@
 		<jsp:include page="customer/Navbar.jsp"></jsp:include>
 
 
-		<div class="container-fluid" id="form-login">
-			<div class="row" id="form-body">
-				<form  method="POST" action="${pageContext.request.contextPath}/authenticateLogin"
-				style="background: whitesmoke;border-radius: 30px;padding: 10px 40px;margin: auto;">
-					<center><h3>Đăng nhập</h3></center>
-					<div class="row">
-                        <div class="col-12">
-                            <label>Số điện thoại: </label><br/>
-                            <input name="username" class="tt-name" type="text" placeholder="0xxx-xxx-xxx" >
-                            <%-- <br><form:errors path="phone"/> --%>
-                        </div>
+		<div class="container-fluid">
+			<div class="row">
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- 404 Error Text -->
+                    <div class="text-center">
+                        <div class="error mx-auto" data-text="404">404</div>
+                        <p class="lead text-gray-800 mb-5">Trang không tồn tại hoặc bạn không có quyền truy cập trang này</p>
+                        <a style="color: #7fad39" href="${pageContext.request.contextPath}/">&larr; Trở về trang chủ</a>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label>Mật khẩu: </label><br/>
-                            <input type="password" name="password" class="tt-name"   placeholder="nhập mật khẩu" >
-                            <%-- <br><form:errors path="password"/> --%>
-                        </div>
-                    </div>
-                    <c:if test="${param.error != null}">
-						<div class="alert alert-danger col-xs-offset-1 col-xs-10">
-							Sai tài khoản hoặc mật khẩu.</div>
-					</c:if>
-
-					<!-- Check for logout -->
-
-					<c:if test="${param.logout != null}">
-
-						<div class="alert alert-success col-xs-offset-1 col-xs-10">Đã
-							đăng xuất.</div>
-
-					</c:if>
-                     <div class="row">
-                        <div class="col-4">
-                            <input type="submit" value="Đăng nhập" id="login">
-                        </div>
-                    </div>
-                   <input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" />
-				</form>
-			</div>
+                </div>
 		</div>
 
 		<jsp:include page="customer/Footer.jsp"></jsp:include>
