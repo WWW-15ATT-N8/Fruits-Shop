@@ -1,5 +1,6 @@
-<%@page import="org.hibernate.internal.build.AllowSysOut"%>
+
 <%@page import="nhom08.entity.Product"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
@@ -7,7 +8,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
@@ -25,10 +27,11 @@
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.min.css">
 </head>
-
 <body>
-
+<% request.setCharacterEncoding("UTF-8"); 
+ response.setCharacterEncoding("UTF-8");%>
 <div class="wrapper">
+
 		<jsp:include page="partial/navbar.jsp"></jsp:include>
 		<jsp:include page="partial/asidebar.jsp"></jsp:include>
 
@@ -71,7 +74,7 @@
 										</button>
 									</div>
 								</div>
-									
+
 									<div class="card-body collapse show">
 									<form:form modelAttribute="product" method="POST" action="${pageContext.request.contextPath}/admin/product/save">
 									<form:hidden path="productID" />
@@ -79,7 +82,9 @@
 											<div class="col-6">
 												<div class="form-group">
 													<label>Name:</label> 
-													<form:input path="name" name="name" class="form-control" placeholder="Name"/>	
+													<form:input path="name" name="name" value="${ name }" class="form-control" placeholder="Name"/>
+													
+													
 												</div>
 												<div class="form-group">
 													<label>Category:</label> 
@@ -136,7 +141,7 @@
 											<div class=col-12>
 												<div class="form-group">
 													<label>Detail:</label>
-													<textarea name="detail" class="form-control" rows="4" accept-charset="ISO-8859-1"
+													<textarea name="detail" class="form-control" rows="4"
 														style="width:100%;" placeholder="Enter detail">${ product.detail }</textarea>
 												</div>
 												<div class="form-group">
@@ -164,59 +169,29 @@
 										</button>
 									</div>
 								</div>
-								
-									
 									<div class="card-body collapse show">
-											<% if(request.getParameter("productID") != null) {%>
-											<form action="/EcoFruits/admin/savefile" method="post" enctype="multipart/form-data">
-												<div class="row">
-														<div class="col-6">
-															<div class="row">
-																<input type="file" name="files" id="image1" accept="image/png, image/jpeg" multiple/>
-															</div>
-															<div class="row">
-																<img class="border" alt="image1" id="thumbnail1" width="200" height="200" src="">
-															</div>
-														</div>
-														<div class="col-6">
-															<div class="row">
-																<input type="file" name="files" id="image2" accept="image/png, image/jpeg"/>
-															</div>
-															<div class="row">
-																<img class="border" alt="image2" id="thumbnail2" width="200" height="200">
-															</div>
+									<form  action="${pageContext.request.contextPath}/admin/image/save?${_csrf.parameterName}=${_csrf.token}"
+											method="Post" 
+											enctype="multipart/form-data">
+										<% if(request.getParameter("productID") != null) {%>
+												 <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+												<input type="hidden" name="productID" value="<%= request.getParameter("productID")%>">
+													<div class="col-12">
+														<input type="file" name="files" multiple="multiple" id="imageFile">
+														<div class="row border mt-3 mb-3 thumbnail-list" style="min-height:160px;">
+															<c:forEach items="${images}" var="image">
+																<img src="${pageContext.request.contextPath}${image.src}" class="mr-3" width="150" height="150">
+															</c:forEach>
 														</div>
 													</div>
-													<div class="row">
-														<div class="col-6">
-															<div class="row">
-															<input type="file" name="files" id="image3" accept="image/png, image/jpeg"/>
-														</div>
-														<div class="row">
-															<img class="border" alt="image3" id="thumbnail3" width="200" height="200" src="">
-														</div>
-														</div>
-														<div class="col-6">
-															<div class="row">
-															<input type="file" name="files" id="image4" accept="image/png, image/jpeg"/>
-														</div>
-														<div class="row">
-															<img class="border" alt="image4" id="thumbnail4" width="200" height="200" src="">
-														</div>
-														</div>
-														
-													</div>
-											
+													
+													<input type="submit" class="btn btn-primary float-right" value="Save">
+													</form>
 												</div>
-													<button class="btn btn-primary float-right">Save</button>
-												</div>
-												
-												
-												</form>
-											<% } else {%>
-												<div>Bãn cần phải lưu Product trước</div>
-											<% }%>
 										
+											<% } else {%>
+												<div>Bạn cần phải lưu Product trước</div>
+											<% }%>		
 									</div>
 						</div>
 					</div>
@@ -241,32 +216,22 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$("#image1").change(function() {
-				showThumbnail(this, "#thumbnail1");
-			});
 			
-			$("#image2").change(function() {
-				showThumbnail(this, "#thumbnail2");
-			});
-			
-			$("#image3").change(function() {
-				showThumbnail(this, "#thumbnail3");
-			});
-			
-			$("#image4").change(function() {
-				showThumbnail(this, "#thumbnail4");
-			});
-			
-			function showThumbnail(fileImage, idThumbnail) {
-				file = fileImage.files[0];
-				reader = new FileReader();
-				reader.readAsDataURL(file);
+			$("#imageFile").change(function() {
+				$(".thumbnail-list").empty();
+				showThumbnail(this);
 				
-				
-				reader.onload = function (e) {
-					console.log(e.target.result);
-					$("#image1").attr('value', e.target.result)
-					$(idThumbnail).attr('src', e.target.result)
+			});
+			
+			
+			function showThumbnail(fileImage) {
+				for (var i = 0; i < fileImage.files.length; i++) {
+					file = fileImage.files[i];
+					reader = new FileReader();
+					reader.readAsDataURL(file);
+					reader.onload = function (e) {
+						$(".thumbnail-list").append('<img src='+ e.target.result +' class="thumbnail mr-3" width="150" height="150">');
+					}
 				}
 			}
 		});

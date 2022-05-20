@@ -197,7 +197,8 @@
 	        type: "int",
 	        min: 0,
 	        max: 100,
-	        grid: true
+	        grid: true,
+			skin : "round",
 	    });
 		</script>
 </body>

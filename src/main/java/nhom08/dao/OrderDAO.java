@@ -1,5 +1,6 @@
 package nhom08.dao;
 
+import java.sql.Date;
 import java.util.List;
 
 import nhom08.entity.Order;
@@ -12,4 +13,5 @@ public interface OrderDAO {
 	public void deleteOrder(Order order);
 	public int getMaxID();
 	public List<Order> getOrdersByDK(String dk);
+	public List<Order> getOrdersByDate(Date date);
 }

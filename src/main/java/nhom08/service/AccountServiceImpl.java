@@ -1,5 +1,7 @@
 package nhom08.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,12 @@ public class AccountServiceImpl implements AccountService{
 	public int lastID() {
 		// TODO Auto-generated method stub
 		return accountDAO.lastID();
+	}
+
+	@Override
+	public List<Account> getAccountByRoleID(int roleID) {
+		// TODO Auto-generated method stub
+		return accountDAO.getAccountByRoleID(roleID);
 	}
 
 }

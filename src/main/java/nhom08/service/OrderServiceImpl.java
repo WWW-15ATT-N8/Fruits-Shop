@@ -1,5 +1,6 @@
 package nhom08.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -72,6 +73,12 @@ public class OrderServiceImpl implements OrderService{
 	public List<Order> getOrdersByDK(String dk) {
 		// TODO Auto-generated method stub
 		return orderDAO.getOrdersByDK(dk);
+	}
+
+	@Override
+	public List<Order> getOrdersByDate(Date date) {
+		// TODO Auto-generated method stub
+		return orderDAO.getOrdersByDate(date);
 	}
 
 }

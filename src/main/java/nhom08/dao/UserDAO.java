@@ -11,4 +11,5 @@ public interface UserDAO {
 	public User getUser(int id);
 	public void deleteUser(User user);
 	public User getUserbyPhone(String phone);
+	public List<User> getUsersFilter(String fullName, String address, String phone, String email);
 }

@@ -44,7 +44,7 @@ public class Product implements Serializable {
 	@OneToMany(mappedBy = "product" ,fetch = FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Comment> comments;
 	
-	@OneToMany(mappedBy = "product" ,fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "product" ,fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Image> images;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -92,6 +92,14 @@ public class Product implements Serializable {
 
 	public double getPrice() {
 		return price;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 
 	public void setPrice(double price) {
