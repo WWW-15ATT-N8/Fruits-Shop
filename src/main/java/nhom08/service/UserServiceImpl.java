@@ -45,4 +45,11 @@ public class UserServiceImpl  implements UserService{
 		return userDAO.getUserbyPhone(phone);
 	}
 
+	@Override
+	@Transactional
+	public List<User> getUsersFilter(String fullName, String address, String phone, String email) {
+		// TODO Auto-generated method stub
+		return userDAO.getUsersFilter(fullName, address, phone, email);
+	}
+
 }

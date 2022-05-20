@@ -51,20 +51,23 @@ public class ProductDaoImpl implements ProductDao {
 
 	@Override
 	@Transactional
-	public List<Product> getProductsFilter(String name, int categoryID, boolean newProduct, boolean bestSaler,
+	public List<Product> getProductsFilter(String name, int categoryID, String newProduct, String bestSaler,
 			String[] rangePrice, String[] rangeStock) {
 		Session currentSession = sessionFactory.getCurrentSession();
+		
+		String queryCategoryID = (categoryID == -1) ? "" : "categoryID =" + categoryID +" and ";
+		String queryNewProduct = newProduct.equalsIgnoreCase("all") ? "" : "newProduct =" + Boolean.parseBoolean(newProduct)+" and ";
+		System.out.println(queryNewProduct);
+		String queryBestSaler = bestSaler.equalsIgnoreCase("all") ? "" : "bestSaler =" + Boolean.parseBoolean(bestSaler)+" and ";
 		Query<Product> query = currentSession.createQuery("from Products where "
 				+ "name like :name and "
-				+ "categoryID = :categoryID and "
-				+ "newProduct = :newProduct and "
-				+ "bestSaler = :bestSaler and "
+				+ queryCategoryID
+				+ queryNewProduct
+				+ queryBestSaler
 				+ "price between :minPrice and :maxPrice  and "
 				+ "stock between :minStock and :maxStock", Product.class);
 		query.setParameter("name", "%"+name+"%");
-		query.setParameter("categoryID", categoryID);
-		query.setParameter("newProduct", newProduct);
-		query.setParameter("bestSaler", bestSaler);
+		
 		query.setParameter("maxPrice", Double.parseDouble(rangePrice[1]+"000"));
 		query.setParameter("minPrice", Double.parseDouble(rangePrice[0]+"000"));
 		query.setParameter("maxStock", Integer.parseInt(rangeStock[1]));

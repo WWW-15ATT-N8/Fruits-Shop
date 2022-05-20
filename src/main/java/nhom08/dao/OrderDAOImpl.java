@@ -1,5 +1,6 @@
 package nhom08.dao;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -65,6 +66,16 @@ public class OrderDAOImpl implements OrderDAO {
 	public List<Order> getOrdersByDK(String dk) {
 		Session currentSession = sessionFactory.getCurrentSession();
 		Query<Order> query = currentSession.createQuery("from Orders " + dk , Order.class);
+		List<Order> orders = query.getResultList();
+		return orders;
+	}
+	
+	@Override
+	@Transactional
+	public List<Order> getOrdersByDate(Date date) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query<Order> query = currentSession.createQuery("from Orders where createdAt = :date" , Order.class);
+		query.setParameter("date", date);
 		List<Order> orders = query.getResultList();
 		return orders;
 	}

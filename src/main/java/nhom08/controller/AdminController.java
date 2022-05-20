@@ -4,22 +4,35 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.PostUpdate;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.mchange.v2.c3p0.FullQueryConnectionTester;
 
 import nhom08.entity.*;
 import nhom08.service.*;
@@ -30,6 +43,8 @@ public class AdminController {
 	public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
     public static final Charset UTF_8 = Charset.forName("UTF-8");
 	public static final String PATH_CONTEXT = "/fruits-shop";
+	private static final long MILLIS_IN_A_DAY = 1000 * 60 * 60 * 24;
+	public static final String PATH_STORE_ROOT = "\\resources\\img\\product_picture\\";
 	@Autowired
 	ProductService productService;
 	
@@ -45,15 +60,25 @@ public class AdminController {
 	@Autowired
 	private StatusService statusService;
 	
+	@Autowired
+	private AccountService accountService;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	RoleService roleService;
+	
+	@Autowired
+	ImageService imageService;
+	
 	@RequestMapping({"", "/", "dashboard"})
 	public String adminPage() {
 		return "redirect:/admin/product/list";
 	}
 	
 	@GetMapping({"/product","/product/","/product/list"})
-	public String list(HttpServletRequest request, Model model, 
-			@RequestParam(value = "bestSaler", required = false) String bestSaler,
-			@RequestParam(value = "newProduct", required = false) String newProduct) {
+	public String list(HttpServletRequest request, Model model) {
 		List<Product> products = null;
 		List<Category> categories = categoryService.getCategories();
         // add the customers to the model
@@ -67,14 +92,12 @@ public class AdminController {
 			int categoryID = Integer.parseInt(request.getParameter("category"));
 			String[] rangePrice = request.getParameter("price").split(";");
 			String[] rangStock = request.getParameter("stock").split(";");
-			boolean isBestSaler = bestSaler == null ? false : true;
-			boolean isNewProduct = newProduct == null ? false : true;
-			String pathBestSaler = isBestSaler ? "bestSaler=on" : "";
-			String pathNewProduct = isNewProduct ? "newProduct=on" : "";
+			String isBestSaler = request.getParameter("bestSaler");
+			String isNewProduct = request.getParameter("newProduct");
 			
 			products = productService.getProductsFilter(name, categoryID, isNewProduct, isBestSaler, rangePrice, rangStock);
 			
-			model.addAttribute("url" , PATH_CONTEXT + "/admin/product/list?name="+ name +"&category="+categoryID+"&"+pathBestSaler+"&"+pathNewProduct+"&price="+rangePrice[0]+"%3B"+rangePrice[1]+"&stock="+rangStock[0]+"%3B"+rangStock[1]+"&");
+			model.addAttribute("url" , PATH_CONTEXT + "/admin/product/list?name="+ name +"&category="+categoryID+"&bestSaler="+isBestSaler+"&newProduct"+isNewProduct+"&price="+rangePrice[0]+"%3B"+rangePrice[1]+"&stock="+rangStock[0]+"%3B"+rangStock[1]+"&");
 			model.addAttribute("categoryID", categoryID);
 			model.addAttribute("bestSaler", isBestSaler);
 			model.addAttribute("newProduct", isNewProduct);
@@ -127,7 +150,10 @@ public class AdminController {
 		List<Category> categories = categoryService.getCategories();
 		model.addAttribute("categories", categories);
 		model.addAttribute("categoryID", product.getCategory().getCategoryID());
+		System.out.println(product.getImages());
 		model.addAttribute("product", product);
+		model.addAttribute("name", product.getName());
+		model.addAttribute("images", product.getImages());
 		byte[] ptext = product.getName().getBytes(ISO_8859_1); 
 		product.setName(new String(ptext, UTF_8)); 
 		System.out.println();
@@ -223,17 +249,23 @@ public class AdminController {
 		return "UploadImg";
 	}
 
-	@RequestMapping(value="/savefile",method=RequestMethod.POST)  
-	public String upload(@RequestParam MultipartFile[] files,HttpServletRequest request, Model model){  
-		String fileName = null;
-		for (MultipartFile file : files) {
-			fileName = saveImage(file, request);
-			
-			break;
+	@RequestMapping(value = "/image/save")  
+	public String upload(@RequestParam(name="files") MultipartFile[] files, @RequestParam(name="productID") int productID, HttpServletRequest request, Model model){  
+		System.out.println("ơ không zo dc thiệt lun");
+		Product product = productService.getProduct(productID);
+		List<Image> images = imageService.getImagesByProductID(productID);
+		if (images.size() != 0) {
+			for (Image image : images) {
+				imageService.deleteImage(image);
+			}
 		}
-		System.out.println("img "+  fileName);
-		model.addAttribute("fileName", fileName);
-		return "upload-success";
+		System.out.println("chưa vô dc nha");
+		for (MultipartFile file : files) {
+			System.out.println("Vô dc nha");
+			String src = PATH_STORE_ROOT+saveImage(file, request);
+			imageService.saveImage(new Image(src, product));
+		}
+		return "redirect:/admin/product/list";
 	} 
 	
 	public String saveImage(MultipartFile file, HttpServletRequest request) {
@@ -247,10 +279,10 @@ public class AdminController {
 				
 				path = path.replace(".metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\", "");
 				
-				System.out.println(path+"src\\main\\webapp\\resources\\img\\"+filename);  
+				System.out.println(path+"src\\main\\webapp"+PATH_STORE_ROOT+filename);  
 				
 				BufferedOutputStream bout=new BufferedOutputStream(  
-						new FileOutputStream(path+"src\\main\\webapp\\resources\\img\\"+filename));  
+						new FileOutputStream(path+"src\\main\\webapp"+PATH_STORE_ROOT+filename));  
 				bout.write(barr);  
 				bout.flush();  
 				bout.close();  
@@ -259,7 +291,6 @@ public class AdminController {
 			}catch(Exception e){System.out.println(e);} 
 		}
 		return filename;
-		
 	}
 	
 	@GetMapping({"/order","/order/","/order/list"})
@@ -350,5 +381,210 @@ public class AdminController {
 		
 		theModel.addAttribute("statuses", list );
 		return "admin/admin-status-list";
+	}
+	
+	@GetMapping({"/user","/user/","/user/list"})
+	private String listUser(HttpServletRequest request, Model model) {
+		List<User> users  = new ArrayList<User>();
+		int roleID = 0;
+		if (request.getParameter("fullName") != null || request.getParameter("email") != null ||
+				request.getParameter("phone") != null || request.getParameter("address") != null
+				|| request.getParameter("roleID") != null) {
+			String fullName = request.getParameter("fullName");
+			String email = request.getParameter("email");
+			String phone = request.getParameter("phone");
+			String address = request.getParameter("address");
+			roleID = Integer.parseInt(request.getParameter("roleID"));
+			
+			System.out.println("start filter");
+			List<User> usersTemp = userService.getUsersFilter(fullName, address, phone, email);
+			System.out.println("start for"+ usersTemp);
+			if(roleID != -1) {
+				for (User user : usersTemp) {
+					if (accountService.getAccount(user.getPhone()) != null) {
+						if (accountService.getAccount(user.getPhone()).getRole().getRoleID() == roleID) {
+							users.add(user);
+						}
+					}
+				}
+			} else {
+				users = usersTemp;
+			}
+			
+			
+			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?fullName="+fullName+"&email="+email+"&phone="+phone+"&address="+address+"&");
+		} else {
+			users = userService.getUsers();
+			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?");
+		}
+		
+		if (users == null) {
+			users = new ArrayList<User>();
+		}
+		
+		List<Role> roles = roleService.getRoles(); 
+		System.out.println(roles);
+		model.addAttribute("roles", roles);
+		model.addAttribute("roleID", roleID);
+		PagedListHolder<User> pagedListHolder = new PagedListHolder<User>(users);
+		int page = ServletRequestUtils.getIntParameter(request, "page", 1);
+		pagedListHolder.setPage(page - 1);
+		pagedListHolder.setPageSize(3);
+		
+//		System.out.println(pagedListHolder);
+		model.addAttribute("users", pagedListHolder);
+		model.addAttribute("pageCount", pagedListHolder.getPageCount());
+		model.addAttribute("pageCurrent", pagedListHolder.getPage());
+		return "admin/admin-user-list";
+	}
+	
+	@GetMapping("/user/create")
+	public String createUser(Model model, HttpServletRequest request) {
+		model.addAttribute("roles", roleService.getRoles());
+		model.addAttribute("user", new User());
+		return "admin/admin-user-form";
+	}
+	
+	@PostMapping("/user/save")
+    public String saveUser(@ModelAttribute("user") User user, @RequestParam("roleID") int roleID, 
+    		@RequestParam("password") String password) {
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), 1, roleService.getRole(roleID));
+		accountService.saveAccount(account);
+		user.setAccount(accountService.getAccount(user.getPhone()));
+		userService.saveUser(user);
+		
+		
+        return "redirect:/admin/user/list";
+    }
+	
+	@GetMapping("/user/updateUserRole")
+    public String updateUserRole(@RequestParam("userID") int userID, @RequestParam("roleID") int roleID) {
+		PasswordEncoder encoder = new BCryptPasswordEncoder();
+		User user = userService.getUser(userID);
+		Account account = accountService.getAccount(user.getPhone());
+		account.setRole(roleService.getRole(roleID));
+		
+		accountService.saveAccount(account);
+		
+		
+        return "redirect:/admin/user/list";
+    }
+	
+	@GetMapping("/user/update")
+	public String updateUser(@RequestParam("userID") int id, @RequestParam("roleID") int roleID, Model model) {
+		model.addAttribute("roleID", roleID);
+		model.addAttribute("user", userService.getUser(id));
+		return "admin-user-form";
+	}
+	
+	@GetMapping("/user/delete")
+	public String deleteUser(@RequestParam("userID") int id,HttpServletRequest request) {
+
+	     User user = userService.getUser(id);
+		userService.deleteUser(user);
+		return "redirect:/admin/user/list";
+	}
+	
+	@GetMapping({"role/list", "/role/", "/role"})
+	public String roleList(Model model) {
+		model.addAttribute("roles", roleService.getRoles());
+		return "admin/admin-role-list";
+	}
+	
+	@GetMapping("dashboard")
+	public String dashboard(Model model , HttpSession session) {
+		List<Order> orders = orderService.getOrders();
+		int totalOrder = getTotalOrder();
+		int theWatingOrder = getWatingOrder(orders);
+		int customerRegis = getCustomerRegis();
+		int lowStockProduct = getLowStockProduct();
+		List<Order> lastOrders = getLastOrder(orders, 5);
+		List<Long> dates = getLastDate(10);
+		
+		List<Double> priceInDay = new ArrayList<Double>();
+		
+		for (Long time : dates) {
+			double total = 0;
+			List<Order> ordersByDay = orderService.getOrdersByDate(new java.sql.Date(time));
+			for (Order order : ordersByDay) {
+				total += order.getTotal();
+			}
+			priceInDay.add(total);
+		}
+		
+		
+		
+		model.addAttribute("priceInDay", priceInDay);
+		model.addAttribute("lowStockProduct", lowStockProduct);
+		model.addAttribute("customerRegis", customerRegis);
+		model.addAttribute("totalOrder", totalOrder);
+		model.addAttribute("theWatingOrder", theWatingOrder);
+		model.addAttribute("lastOrders", lastOrders);
+		return "admin/dashboard";
+	}
+	
+
+	
+	private List<Long> getLastDate(int size) {
+		long getTime = new Date().getTime();
+		List<Long> dates = new ArrayList<Long>();
+		for (int i = size-1; i >= 0; i--) {
+			getTime -= MILLIS_IN_A_DAY;
+			dates.add(getTime);
+		}
+		Collections.reverse(dates);
+		return dates;
+	}
+
+	private List<Order_Detail> totalProductSaleByDate() {
+		long getTime = new Date().getTime();
+		java.sql.Date date = new java.sql.Date(getTime);
+		List<Order> orders = orderService.getOrdersByDate(date);
+		System.out.println(orders);
+		return orderDetailService.getOrdersDetailsByOrderID(orders.get(0).getOrderID());
+	}
+
+	private List<Order> getLastOrder(List<Order> orders, int numOrder) {
+		List<Order> lastOrder = new ArrayList<Order>();
+		for (int i = orders.size()-1; i >= 0; i--) {
+			if (orders.size() <= 5) {
+				lastOrder.add(orders.get(i));
+			}
+		}
+		System.out.println("last  " +lastOrder);
+		return lastOrder;
+	}
+
+	private int getLowStockProduct() {
+		int lowStock = 0;
+		List<Product> products = productService.getProducts();
+		for (Product product : products) {
+			if(product.getStock() < 5) {
+				lowStock ++;
+			}
+		}
+		return lowStock;
+	}
+
+	private int getCustomerRegis() {
+		int role_customerID = 2;
+		return accountService.getAccountByRoleID(role_customerID).size();
+	}
+
+	private int getWatingOrder(List<Order> orders) {
+		int totalOrders = 0;
+		int statusDaHuy = 4;
+		int statusThanhCong = 5;
+		for (Order order : orders) {
+			if (order.getStatus().getStatusID() != statusDaHuy &&  order.getStatus().getStatusID() != statusThanhCong) {
+				totalOrders ++;
+			}
+		}
+		return totalOrders;
+	}
+
+	public int getTotalOrder() {
+		return orderDetailService.getOrdersDetails().size();
 	}
 }

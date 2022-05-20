@@ -1,5 +1,9 @@
 package nhom08.dao;
 
+import java.util.List;
+
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -47,6 +51,16 @@ public class AccountDAOImpl implements AccountDAO {
 		Query<Integer> query = currentSession.createQuery(" select max(accountID) from Accounts");
 		int max = query.getSingleResult();
 		return max;
+	}
+	
+	@Override
+	@Transactional
+	public List<Account> getAccountByRoleID(int roleID) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query<Account> query = currentSession.createQuery("from Accounts where roleID = :roleID", Account.class);
+		query.setParameter("roleID", roleID);
+		List<Account> accounts = query.getResultList();
+		return accounts;
 	}
 
 }
