@@ -142,6 +142,9 @@ response.setCharacterEncoding("UTF-8");
 										</thead>
 										<tbody>
 											<c:forEach items="${lastOrders}" var="order">
+												<c:url var="DetailOrder" value="/admin/order/detail">
+													<c:param name="orderID" value="${order.orderID}" />
+												</c:url>
 												<tr>
 													<td>${ order.createdDate }</td>
 													<td>${ order.user.fullName}</td>

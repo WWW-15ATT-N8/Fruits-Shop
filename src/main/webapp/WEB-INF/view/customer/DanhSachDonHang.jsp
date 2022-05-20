@@ -27,7 +27,11 @@
 	        <script src="../js/functionsHandle.js"></script>
 	        <script src="../js/regex.js"></script>
 	        <script src="../js/search.js"></script>  -->
-
+<style type="text/css">
+footer{
+margin-top: 5vh;
+}
+</style>
 </head>
 <body>
 	<div class="wrapper">
