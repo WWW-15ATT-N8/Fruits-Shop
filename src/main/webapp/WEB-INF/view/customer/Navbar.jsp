@@ -49,13 +49,13 @@
 					class="nav-link dropdown-toggle" href=""
 					id="dropdownId" aria-haspopup="true" aria-expanded="false">Sản phẩm khác</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownId">
-						<%-- <%
+						<%
 							List<Category> categories = (List<Category>)session.getAttribute("category");
 							for(Category c : categories){
 								if(c.getCategoryID()!=4)
 									out.println("<a class=\"dropdown-item\" href=\"/fruits-shop/category/id="+c.getCategoryID()+"\">"+ c.getName() +"</a>");
 							}
-						%> --%>
+						%>
 					</div></li>
 				
 				<li class="nav-item "><a class="nav-link" id="navbar-btn-dichvu"
@@ -93,14 +93,14 @@
 					<li class="nav-item dropdown">
 						<button type="button" class="nav-link dropdown-toggle bi bi-person btn-person-pc"  id="btnLogin" aria-haspopup="true" aria-expanded="false"></button>
 		      				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownId">
-		        				<security:authorize access="hasAnyRole('ADMIN', 'CUSTOMER')">
-								<a class="dropdown-item" href="/fruits-shop/admin">Trang quản trị</a>
+		        				<security:authorize access="hasAnyRole('ADMIN')">
+								<a class="dropdown-item" href="/fruits-shop/admin/dashboard">Trang quản trị</a>
 		                    	</security:authorize>
 		       				<a class="dropdown-item" href="/fruits-shop/user/thong-tin-ca-nhan">Thông tin cá nhân</a>
 		       				<a class="dropdown-item" href="/fruits-shop/user/order/list">Đơn hàng</a>
+		       				<a class="dropdown-item" href="/fruits-shop/user/doi-mat-khau">Đổi mật khẩu</a>
 		       				<a class="dropdown-item" href="/fruits-shop/logout">Đăng xuất</a>
-		      				</div>
-			            
+		      				</div>            
 		            </li>
 	            </security:authorize>
 	            <security:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')">

@@ -46,18 +46,25 @@
 				<div class="thanhtoan row">
                     <div class="thanhtoan-left col-md-6">
                     
-                    	<c:url var="saveOrder" value="/user/order/saveorder"></c:url>
+                    	<c:url var="saveOrder" value="/user/order/saveorder?${_csrf.parameterName}=${_csrf.token}"></c:url>
                     	
-                        <form:form class="thanhtoan"  action="${saveOrder}" modelAttribute="Order" method="get" >
+                        <form:form class="thanhtoan"  action="${saveOrder}" modelAttribute="Order" method="post" >
+                        <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
                         	<form:input type="hidden" path="total"  value="<%= total%>"/>
                             <p id="tt-tt">Thông tin thanh toán</p>
-                           <%--  <div class="row">
+                           <div class="row">
                                 <div class="col-12">
                                     <label>Họ và tên: </label><br/>
-                                    <input name="UName" class="tt-name" type="text" id="thanhtoan-Lname" disabled value="<%= USER.getFullName()%>">
+                                    <input class="tt-name" type="text" id="thanhtoan-Lname" disabled value="<%= USER.getFullName()%>">
                                     <small id="thanhtoan-Lname-note" class="form-text note"></small>
-                                </div>
-                            </div> --%>
+                                </div><%-- 
+                                <div class="col-6" >
+                                    <label>Email: </label><br/>
+                                    <input class="tt-name" type="text" id="thanhtoan-Lname" disabled value="<%= USER.getEmail()%>"
+                                    style="width: 90% !important;" >
+                                    <small id="thanhtoan-Lname-note" class="form-text note"></small>
+                                </div> --%>
+                            </div>
                           <!--   <div class="row">
                                 <div class="col-12">
                                     <label>Thành phố/Tỉnh: </label><br/>
@@ -68,7 +75,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <label>Địa chỉ nhận hàng: </label>
-                                    <form:input path="shipAddress"  type="text" id="thanhtoan-add" placeholder="13, Đường Nguyễn Văn Bảo, Quận Gò Vấp" />
+                                    <form:input path="shipAddress"  type="text" id="thanhtoan-add" value="<%= USER.getAddress()%>"/>
                                    	<br><form:errors cssClass="error" class="form-text note" path="shipAddress" />
                                     <!-- <small id="thanhtoan-add-note" class="form-text note"></small> -->
                                 </div>
@@ -76,7 +83,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <label>Số điện thoại nhận hàng: </label><br/>
-                                    <form:input path="shipPhone"  type="text" id="thanhtoan-tel" placeholder="0xxx-xxx-xxx" />
+                                    <form:input path="shipPhone"  type="text" id="thanhtoan-tel" value="<%= USER.getPhone()%>" />
                                     <br><form:errors  cssClass="error" class="form-text note" path="shipPhone" />
                                    <!--  <small id="thanhtoan-tel-note" class="form-text note"></small> -->
                                 </div>

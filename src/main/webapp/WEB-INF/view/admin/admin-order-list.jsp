@@ -31,7 +31,11 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.min.css">
 </head>
 <body>
+<<<<<<< HEAD
+<div class="wrapper">
+=======
 	<div class="wrapper">
+>>>>>>> 563ff034ddead2d64a1316926f3617e2a24c0001
 	<jsp:include page="partial/navbar.jsp"></jsp:include>
 	<jsp:include page="partial/asidebar.jsp"></jsp:include>
 	<div class="content-wrapper">
@@ -192,6 +196,58 @@
 											</a> <%-- ${((order.status.statusID != 4 && order.status.statusID != 5) ? '<a id="deleteOrder" href="${ deleteOrder}" class="btn btn-danger" style="width: 90%; margin-top:2%;"> <i class="fa-solid fa-trash"></i> Hủy đơn</a>' : '')}	
 													 --%></td>
 										</tr>
+<<<<<<< HEAD
+									</thead>
+									<tbody>
+										<c:forEach items="${orders.pageList}" var="order">
+											<%-- <c:url var="deleteOrder" value="${pageContext.request.contextPath}/admin/order/updatestatus?orderID=${order.orderID}&statusID=4"></c:url>
+											 --%>
+											 <c:url var="DetailOrder" value="/admin/order/detail">
+												<c:param name="orderID" value="${order.orderID}" />
+											</c:url>
+											<tr>
+												<td class="text-center check-item"><input type="checkbox"></td>
+												<td>${ order.createdDate }</td>
+												<td>${ order.user.fullName}</td>
+												<td>${ order.shipPhone }</td>
+												<td><fmt:formatNumber value = "${ order.total }" type = "number" maxFractionDigits = "0"/> VND</td>
+												<td><fmt:formatNumber value = "${ order.discount }" type = "number" maxFractionDigits = "0"/> VND</td>
+												<td style="margin: auto;">
+													<form action="${pageContext.request.contextPath}/admin/order/updatestatus?${_csrf.parameterName}=${_csrf.token}" method="post">
+														<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+														<input type="hidden" name="orderID" value="${order.orderID}">
+														<select class="form-control" name="statusID" style="width: 100%; margin-bottom:2%;">
+															<c:forEach items="${status}" var="status">
+																<option ${ order.status.statusID == status.statusID ? 'selected="selected"' : '' } value="${ status.statusID }">${ status.name }</option>
+															</c:forEach>
+														</select>
+														${((order.status.statusID != 4 && order.status.statusID != 5) ? '<input type="submit" value="Cập nhật" class="btn btn-primary" style="width: 100%; margin-top:2%;">' : '')}
+													</form>
+												</td>
+												<td>
+													<a id="DetailOrder" href="${ DetailOrder }"
+													type="button" class="btn btn-warning mr-2" style="width: 90%; margin-bottom:2%; color:white;">
+													<i class="fa-regular fa-file-lines"></i> Chi tiết</a> 
+													<%-- ${((order.status.statusID != 4 && order.status.statusID != 5) ? '<a id="deleteOrder" href="${ deleteOrder}" class="btn btn-danger" style="width: 90%; margin-top:2%;"> <i class="fa-solid fa-trash"></i> Hủy đơn</a>' : '')}	
+													 --%>	
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+												
+							<div class="card-footer">
+								<div class="row">
+									<div class="col-6">Pagination</div>
+										<div class="col-6">
+											<jsp:include page="partial/pagination.jsp">
+											<jsp:param name="pageCount" value="${ pageCount }" />
+											<jsp:param name="pageCurrent" value="${ pageCurrent }" />
+											<jsp:param name="url" value="${ url }" />
+										</jsp:include>
+									</div>
+=======
 									</c:forEach>
 								</tbody>
 							</table>
@@ -206,6 +262,7 @@
 										<jsp:param name="pageCurrent" value="${ pageCurrent }" />
 										<jsp:param name="url" value="${ url }" />
 									</jsp:include>
+>>>>>>> 563ff034ddead2d64a1316926f3617e2a24c0001
 								</div>
 							</div>
 						</div>
@@ -217,8 +274,13 @@
 	</div>
 	<jsp:include page="partial/footer.jsp"></jsp:include>
 	<jsp:include page="partial/control-sidebar.jsp"></jsp:include>
+<<<<<<< HEAD
+ </div>
+		<script type="text/javascript"
+=======
 	</div>
 	<script type="text/javascript"
+>>>>>>> 563ff034ddead2d64a1316926f3617e2a24c0001
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>

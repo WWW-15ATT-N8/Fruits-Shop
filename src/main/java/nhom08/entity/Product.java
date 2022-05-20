@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+
 
 @Entity(name = "Products")
 @Table(name = "Products")
@@ -32,32 +32,32 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int productID;
 	
-	@NotNull(message = "* Tên không được để trống")
+	@NotNull(message = "Tên thiệp không được để trống")
 	private String name;
 	
-	@NotNull(message = "* Giá mới không được để trống")
-	@Min(value = 0, message = "Giá sản phẩm phải lớn hơn hoặc bằng 0")
+	@NotNull(message = "Giá không được trống")
+    @Min(value = 0, message = "Giá sản phẩm không được âm")
 	private double price;
 	
-	@NotNull(message = "* Giá cũ được để trống")
-	@Min(value = 0, message = "Giá cũ phải lớn hơn hoặc bằng 0")
+	@NotNull(message = "Giá cũ không được trống")
+    @Min(value = 0, message = "Giá cũ không được âm")
 	private double oldPrice;
 	
-	@NotNull(message = "* Mô tả không được để trống")
 	private String description;
 	
-	@NotNull(message = "* Chi tiết không được để trống")
 	private String detail;
 	
-	@NotNull(message = "* Hàng tồn không được để trống")
-	@Min(value = 0, message = "Hàng tồn phải lớn hơn hoặc bằng 0")
+	@NotNull(message = "Số lượng không được trống")
+    @Min(value = 0, message = "Số lượng không được âm")
 	private int stock;
 	
-	@Min(value = 0, message = "Giảm giá không dc nhỏ hơn 0")
-	@Max(value = 100, message = "Giảm giá không dc lớn hơn 100")
+	@NotNull(message = "Giảm giá không được trống")
+    @Min(value = 0, message = "Giảm giá không được âm")
+	@Max(value = 100, message = "Giảm giá phải nhỏ hơn 100")
 	private double discount;
 	
 	private boolean newProduct;
+	
 	private boolean bestSaler;
 	
 	@ManyToOne

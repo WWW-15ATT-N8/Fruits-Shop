@@ -33,6 +33,7 @@ request.setCharacterEncoding("UTF-8");
 response.setCharacterEncoding("UTF-8");
 %>
 <body>
+<div class="wrapper">
 	<jsp:include page="partial/navbar.jsp"></jsp:include>
 	<jsp:include page="partial/asidebar.jsp"></jsp:include>
 	<%
@@ -83,6 +84,12 @@ response.setCharacterEncoding("UTF-8");
 							<div class="card-body collapse show">
 								<div class="row">
 									<div class="col-6">
+<<<<<<< HEAD
+										<p><b>Mã đơn hàng</b>: <%= o.getOrderID()%></p>
+										<p><b>Ngày tạo</b>: <%= o.getCreatedDate()%></p>
+										<p><b>Địa chỉ giao hàng</b>: <%= o.getShipAddress().toUpperCase()%></p>
+										<p><b>Số điện thoại giao hàng</b>: <%= o.getShipPhone()%></p>
+=======
 										<p>
 											<b>Mã đơn hàng</b>:
 											<%=o.getOrderID()%></p>
@@ -95,6 +102,7 @@ response.setCharacterEncoding("UTF-8");
 										<p>
 											<b>Số điện thoại giao hàng</b>:
 											<%=o.getShipAddress()%></p>
+>>>>>>> 563ff034ddead2d64a1316926f3617e2a24c0001
 									</div>
 									<div class="col-6">
 										<%
@@ -197,7 +205,12 @@ response.setCharacterEncoding("UTF-8");
 	</div>
 	<jsp:include page="partial/footer.jsp"></jsp:include>
 	<jsp:include page="partial/control-sidebar.jsp"></jsp:include>
+<<<<<<< HEAD
+</div>
+		<script type="text/javascript"
+=======
 	<script type="text/javascript"
+>>>>>>> 563ff034ddead2d64a1316926f3617e2a24c0001
 		src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>

@@ -30,7 +30,6 @@ public class Account implements Serializable {
 	private String phone;
 	
 	@NotNull(message = "* Mật khẩu không được để trống")
-//	@Pattern(regexp = "\"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$\"", message = "* Mật khẩu cần tối thiểu 8 kí tử, ít nhất một chữ cái và một số")
 	private String password;
 	
 	private int enabled;
@@ -45,15 +44,14 @@ public class Account implements Serializable {
 	public Account() {
 		super();
 	}
+	
 
-	public Account(int accountID, String phone, String password, int enabled, Role role, User user) {
+	public Account(String phone, String password, Role role) {
 		super();
-		this.accountID = accountID;
 		this.phone = phone;
 		this.password = password;
-		this.enabled = enabled;
+		this.enabled = 1;
 		this.role = role;
-		this.user = user;
 	}
 
 	public int getAccountID() {
@@ -64,15 +62,6 @@ public class Account implements Serializable {
 		this.accountID = accountID;
 	}
 	
-	
-
-	public Account(String phone, String password, int enabled, Role role) {
-		super();
-		this.phone = phone;
-		this.password = password;
-		this.enabled = enabled;
-		this.role = role;
-	}
 
 	public String getPhone() {
 		return phone;

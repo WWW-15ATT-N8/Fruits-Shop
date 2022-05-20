@@ -39,8 +39,9 @@ public class HomeController {
 	private UserService userService;
 	@Autowired
 	private CartService cartService;
+	
 	@Autowired
-	CategoryService categoryService;
+	private CategoryService categoryService;
 
 	@RequestMapping({ "/", "/trang-chu", "/home" })
 	public String home(HttpServletRequest request, HttpSession session, Model theModel) {

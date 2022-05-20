@@ -21,6 +21,7 @@ public class Role implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int roleID;
+	
 	@NotNull(message = "* Tên không được để trống")
 	private String title;
 	
