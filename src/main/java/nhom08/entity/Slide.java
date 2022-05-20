@@ -6,14 +6,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Slide {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int slideID;
+	
 	@Column(name = "image")
+	@NotNull(message = "* Hình ảnh không được để trống")
 	private String image;
+	
 	public int getSlideId() {
 		return slideID;
 	}

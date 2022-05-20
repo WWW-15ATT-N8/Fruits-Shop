@@ -15,6 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity(name = "Products")
 @Table(name = "Products")
@@ -27,13 +31,32 @@ public class Product implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int productID;
+	
+	@NotNull(message = "* Tên không được để trống")
 	private String name;
+	
+	@NotNull(message = "* Giá mới không được để trống")
+	@Min(value = 0, message = "Giá sản phẩm phải lớn hơn hoặc bằng 0")
 	private double price;
+	
+	@NotNull(message = "* Giá cũ được để trống")
+	@Min(value = 0, message = "Giá cũ phải lớn hơn hoặc bằng 0")
 	private double oldPrice;
+	
+	@NotNull(message = "* Mô tả không được để trống")
 	private String description;
+	
+	@NotNull(message = "* Chi tiết không được để trống")
 	private String detail;
+	
+	@NotNull(message = "* Hàng tồn không được để trống")
+	@Min(value = 0, message = "Hàng tồn phải lớn hơn hoặc bằng 0")
 	private int stock;
+	
+	@Min(value = 0, message = "Giảm giá không dc nhỏ hơn 0")
+	@Max(value = 100, message = "Giảm giá không dc lớn hơn 100")
 	private double discount;
+	
 	private boolean newProduct;
 	private boolean bestSaler;
 	
@@ -46,7 +69,7 @@ public class Product implements Serializable {
 	
 	@OneToMany(mappedBy = "product" ,fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Image> images;
-	
+	 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Cart> carts;
 	

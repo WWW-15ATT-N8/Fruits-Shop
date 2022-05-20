@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "Vouchers")
@@ -22,8 +24,12 @@ public class Voucher implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int voucherID;
+	
+	@NotNull(message = "* Số điện thoại không được để trống")
+	@Size(min = 0, max=100, message = "Giảm giá nằm trong khoảng từ 0 đến 100")
 	private double discount;
 	private double minTotal;
+	@NotNull(message = "* Mã giảm giá không được để trống")
 	private String code;
 	private int amount;
 	private Date startDate;
