@@ -15,9 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -89,6 +93,25 @@ public class AdminController {
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 	
+	public void loadUser(HttpServletRequest request, HttpSession session) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			User u = new User();
+			String phone = authentication.getName();
+			u = userService.getUserbyPhone(phone);
+			double total = 0.0;
+			
+				
+			session.setAttribute("USER",u);
+			session.setAttribute("total",total);
+		}
+		
+		if(session.getAttribute("category") == null) {
+			List<Category> categories = categoryService.getCategories();
+			session.setAttribute("category", categories);
+		}
+	}
+	
 	@GetMapping({"/product","/product/","/product/list"})
 	public String list(HttpServletRequest request, Model model) {
 		List<Product> products = null;
@@ -140,7 +163,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/product/create")
-	public String create(Model model) {
+	public String create(Model model, HttpServletRequest request, HttpSession session) {
+		loadUser(request, session);
 		List<Category> categories = categoryService.getCategories();
 		model.addAttribute("product", new Product());
 		model.addAttribute("categories", categories);
@@ -149,12 +173,17 @@ public class AdminController {
 	
 	@PostMapping("/product/save")
     public String saveProduct(
+    		Model model,
     		@ModelAttribute("categoryID") int categoryID,
-    		@Valid @ModelAttribute("product") Product product,  
+    		@ModelAttribute("product") @Valid Product product,  
     		BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) 
-			return "redirect:/admin/product/create";
-		System.out.println(categoryID);
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("categories", categoryService.getCategories());
+			return "admin/admin-product-form";
+		}
+		
+		
+		
 		Category category = categoryService.getCategory(categoryID);
 		product.setCategory(category);
 		productService.saveProduct(product);
@@ -401,16 +430,15 @@ public class AdminController {
 		List<User> users  = new ArrayList<User>();
 		int roleID = 0;
 		if (request.getParameter("fullName") != null || request.getParameter("email") != null ||
-				request.getParameter("phone") != null || request.getParameter("address") != null
+				request.getParameter("phone") != null
 				|| request.getParameter("roleID") != null) {
 			String fullName = request.getParameter("fullName");
 			String email = request.getParameter("email");
 			String phone = request.getParameter("phone");
-			String address = request.getParameter("address");
 			roleID = Integer.parseInt(request.getParameter("roleID"));
 			
 			System.out.println("start filter");
-			List<User> usersTemp = userService.getUsersFilter(fullName, address, phone, email);
+			List<User> usersTemp = userService.getUsersFilter(fullName, phone, email);
 			System.out.println("start for"+ usersTemp);
 			if(roleID != -1) {
 				for (User user : usersTemp) {
@@ -425,7 +453,7 @@ public class AdminController {
 			}
 			
 			
-			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?fullName="+fullName+"&email="+email+"&phone="+phone+"&address="+address+"&");
+			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?fullName="+fullName+"&email="+email+"&phone="+phone+"&");
 		} else {
 			users = userService.getUsers();
 			model.addAttribute("url" , PATH_CONTEXT + "/admin/user/list?");
@@ -460,14 +488,11 @@ public class AdminController {
 	
 	@PostMapping("/user/save")
     public String saveUser( @RequestParam("roleID") int roleID, 
+    		Model model,
     		 @RequestParam("password") String password, @Valid @ModelAttribute("user") User user, BindingResult bindingResult ) {
 		if (bindingResult.hasErrors()) {
-			System.out.println("lỗi mẹ rồi: "+ user);
-			bindingResult
-			.getFieldErrors()
-			.stream()
-			.forEach(f -> System.out.println(f.getField() + ": " + f.getDefaultMessage()));
-			return "redirect:/admin/user/create";
+			model.addAttribute("roles", roleService.getRoles());
+			return "admin/admin-user-form";
 		}
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), roleService.getRole(roleID));

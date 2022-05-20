@@ -68,7 +68,7 @@
 								<div class="card-header bg-info" aria-expanded="true"
 									data-target=".collapse" data-card-widget="collapse"
 									style="cursor: pointer;">
-									<div class="card-title">Create Product Info</div>
+									<div class="card-title">Thông tin sản phẩm</div>
 									<div class="card-tools">
 										<button data-card-widget="collapse" type="button"
 											class="btn btn-tool">
@@ -214,12 +214,13 @@
 											value="<%=request.getParameter("productID")%>">
 										<div class="col-12">
 											<input type="file" name="files" multiple="multiple"
-												id="imageFile">
+												id="imageFile" accept=".jpg, .jpeg, .png" >
 											<div class="row border mt-3 mb-3 thumbnail-list"
 												style="min-height: 160px;">
 												<c:forEach items="${images}" var="image">
-													<img src="${pageContext.request.contextPath}${image.src}"
-														class="mr-3" width="150" height="150">
+												<%-- 	<img src="${pageContext.request.contextPath}${image.src}"
+														class="mr-3" width="150" height="150"> --%>
+													<input type="file" value="${pageContext.request.contextPath}${image.src}">
 												</c:forEach>
 											</div>
 										</div>
@@ -227,10 +228,8 @@
 										<input type="submit" class="btn btn-primary float-right" 
 											value="Save">
 									</form>
-								</div>
 								
-								
-								<%
+							<%
 								} else {
 								%>
 								<div>Bạn cần phải lưu Sản phẩm trước</div>
@@ -256,12 +255,11 @@
 	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/js/OverlayScrollbars.min.js"></script>
 	<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/6.0.0-beta.2/dropzone-min.js"></script>
+	<script type="text/javascript"
 		src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
-	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-
+<script type="text/javascript">
+		$(document).ready(function() {
 							$("#imageFile").change(function() {
 								$(".thumbnail-list").empty();
 								showThumbnail(this);
@@ -283,6 +281,20 @@
 								
 							}
 						});
+	</script>
+	<script type="text/javascript">
+
+	  Dropzone.options.myGreatDropzone = { // camelized version of the `id`
+	    paramName: "file", // The name that will be used to transfer the file
+	    maxFilesize: 2, // MB
+	    accept: function(file, done) {
+	      if (file.name == "justinbieber.jpg") {
+	        done("Naha, you don't.");
+	      }
+	      else { done(); }
+	    }
+	  };
+
 	</script>
 </body>
 </html>
