@@ -1,3 +1,5 @@
+<%@page import="nhom08.entity.Order_Detail"%>
+<%@page import="java.util.List"%>
 <%@page import="nhom08.entity.Order"%>
 <%@page import="nhom08.entity.User"%>
 <%@page import="nhom08.entity.Product"%>
@@ -38,6 +40,8 @@ response.setCharacterEncoding("UTF-8");
 		<jsp:include page="partial/asidebar.jsp"></jsp:include>
 		<%
 			Order o = (Order) request.getAttribute("order");
+			List<Order_Detail> d = (List<Order_Detail>)request.getAttribute("detail");
+			o.setOrder_Details(d);
 		%>
 
 		<div class="content-wrapper">
@@ -165,9 +169,9 @@ response.setCharacterEncoding("UTF-8");
 											<tr>
 												<th class="text-capitalize">Mã sản phẩm</th>
 												<th class="text-capitalize">Tên sản phẩm</th>
-												<th class="text-capitalize">Đơn giá</th>
-												<th class="text-capitalize">số lượng</th>
-												<th class="text-capitalize">tổng</th>
+												<th class="text-capitalize" style="text-align: right;">Đơn giá</th>
+												<th class="text-capitalize" style="text-align: ceter;">số lượng</th>
+												<th class="text-capitalize" style="text-align: right;">tổng</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -175,17 +179,32 @@ response.setCharacterEncoding("UTF-8");
 												<tr>
 													<td>${ detail.product.productID }</td>
 													<td>${ detail.product.name}</td>
-													<td><fmt:formatNumber value="${ detail.price }"
+													<td style="text-align: right;"><fmt:formatNumber value="${ detail.price }"
 															type="number" maxFractionDigits="0" /> VND</td>
-													<td>${ detail.amount }</td>
-													<td><fmt:formatNumber
+													<td style="text-align: center;">${ detail.amount }</td>
+													<td style="text-align: right;"><fmt:formatNumber
 															value="${ detail.price*detail.amount }" type="number"
 															maxFractionDigits="0" /> VND</td>
 												</tr>
 											</c:forEach>
 											<tr>
-												<td colspan="4"><b>Tổng tiền</b></td>
-												<td><fmt:formatNumber value="<%=o.getTotal()%>"
+												<td style="border-top: 2px solid " colspan="4">Tổng tiền</td>
+												<td style="text-align: right; border-top: 2px solid "><fmt:formatNumber value="<%=o.getTongTien()%>"
+														type="number" maxFractionDigits="0" /> VND</td>
+											</tr>
+											<tr>
+												<td colspan="4">Thuế VAT (8%)</td>
+												<td style="text-align: right;"><fmt:formatNumber value="<%=o.getTongTien()*0.08%>"
+														type="number" maxFractionDigits="0" /> VND</td>
+											</tr>
+											<tr>
+												<td colspan="4">Giảm giá</td>
+												<td style="text-align: right;"><fmt:formatNumber value="<%=0%>"
+														type="number" maxFractionDigits="0" /> VND</td>
+											</tr>
+											<tr>
+												<td colspan="4"><b>Tổng Thành Tiền</b></td>
+												<td style="text-align: right;"><fmt:formatNumber value="<%= o.getThanhTien()%>"
 														type="number" maxFractionDigits="0" /> VND</td>
 											</tr>
 										</tbody>
