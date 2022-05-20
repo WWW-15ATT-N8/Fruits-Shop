@@ -99,8 +99,7 @@
 		       				<a class="dropdown-item" href="/fruits-shop/user/thong-tin-ca-nhan">Thông tin cá nhân</a>
 		       				<a class="dropdown-item" href="/fruits-shop/user/order/list">Đơn hàng</a>
 		       				<a class="dropdown-item" href="/fruits-shop/logout">Đăng xuất</a>
-		      				</div>
-			            
+		      				</div>            
 		            </li>
 	            </security:authorize>
 	            <security:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')">
