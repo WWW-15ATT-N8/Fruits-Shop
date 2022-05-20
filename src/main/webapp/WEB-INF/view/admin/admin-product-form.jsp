@@ -224,11 +224,12 @@
 											</div>
 										</div>
 
-										<input type="submit" class="btn btn-primary float-right"
+										<input type="submit" class="btn btn-primary float-right" 
 											value="Save">
 									</form>
 								</div>
-
+								
+								
 								<%
 								} else {
 								%>
@@ -244,8 +245,6 @@
 		</div>
 		<jsp:include page="partial/footer.jsp"></jsp:include>
 		<jsp:include page="partial/control-sidebar.jsp"></jsp:include>
-	</div>
-
 	</div>
 
 	<script type="text/javascript"
@@ -280,6 +279,8 @@
 														'<img src='+ e.target.result +' class="thumbnail mr-3" width="150" height="150">');
 									}
 								}
+								
+								
 							}
 						});
 	</script>

@@ -165,9 +165,15 @@ public class UserController {
 	
 	@PostMapping("/order/saveorder")
 	public String saveOrder(HttpServletRequest request, HttpSession session, @Valid @ModelAttribute("Order") Order theOrder, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			System.out.println("lỗi mẹ rồi: "+theOrder);
+			bindingResult
+			.getFieldErrors()
+			.stream()
+			.forEach(f -> System.out.println(f.getField() + ": " + f.getDefaultMessage()));
+			return "redirect:/user/order";
+		}
 		loadUser(request, session);
-		if (bindingResult.hasErrors()) 
-			return "customer/ThanhToan";
 		Date now = new Date(System.currentTimeMillis());
 		User u = (User)session.getAttribute("USER");
 		List<Cart> carts = cartService.getCartsbyUserID(u.getUserID());

@@ -461,8 +461,14 @@ public class AdminController {
 	@PostMapping("/user/save")
     public String saveUser( @RequestParam("roleID") int roleID, 
     		 @RequestParam("password") String password, @Valid @ModelAttribute("user") User user, BindingResult bindingResult ) {
-		if (bindingResult.hasErrors()) 
+		if (bindingResult.hasErrors()) {
+			System.out.println("lỗi mẹ rồi: "+ user);
+			bindingResult
+			.getFieldErrors()
+			.stream()
+			.forEach(f -> System.out.println(f.getField() + ": " + f.getDefaultMessage()));
 			return "redirect:/admin/user/create";
+		}
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), roleService.getRole(roleID));
 		accountService.saveAccount(account);
