@@ -53,5 +53,7 @@ public class CartDAOImpl  implements CartDAO{
 		Cart cart  = currentSession.get(Cart.class, new Cart_FK(userID, productID));
 		return cart;
 	}
+	
+	
 
 }

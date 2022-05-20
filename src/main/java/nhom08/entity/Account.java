@@ -54,6 +54,16 @@ public class Account implements Serializable {
 	public void setAccountID(int accountID) {
 		this.accountID = accountID;
 	}
+	
+	
+
+	public Account(String phone, String password, int enabled, Role role) {
+		super();
+		this.phone = phone;
+		this.password = password;
+		this.enabled = enabled;
+		this.role = role;
+	}
 
 	public String getPhone() {
 		return phone;

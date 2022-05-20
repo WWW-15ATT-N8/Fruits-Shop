@@ -30,7 +30,6 @@ public class CategoryDaoImpl implements CategoryDao {
 		Session currentSession = sessionFactory.getCurrentSession();
 		Query<Category> query = currentSession.createQuery("from Categories", Category.class);
 		List<Category> categories = query.getResultList();
-		System.out.println(categories);
 		return categories;
 	}
 

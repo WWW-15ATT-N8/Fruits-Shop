@@ -43,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public List<Product> getProductsFilter(String name, int categoryID, boolean newProduct, boolean bestSaler,
+	public List<Product> getProductsFilter(String name, int categoryID, String newProduct, String bestSaler,
 			String[] rangePrice, String[] rangeStock) {
 		return productDao.getProductsFilter(name, categoryID, newProduct, bestSaler, rangePrice, rangeStock);
 	}

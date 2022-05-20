@@ -58,4 +58,20 @@ public class UserDAOImpl implements UserDAO {
 		return u;
 	}
 
+	@Override
+	public List<User> getUsersFilter(String fullName, String address, String phone, String email) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query<User> query = currentSession.createQuery("from Users where "
+				+ "fullName like :fullName and "
+				+ "address like :address and "
+				+ "phone like :phone and "
+				+ "email like :email", User.class);
+		query.setParameter("fullName", "%"+fullName+"%");
+		query.setParameter("address", "%"+address+"%");
+		query.setParameter("phone", "%"+phone+"%");
+		query.setParameter("email", "%"+email+"%");
+		List<User> users = query.getResultList();
+		return users;
+	}
+
 }
