@@ -39,6 +39,12 @@
 	    padding: 2%;
 	    max-width: 700px;
 }
+#navbar-btn-home{
+    color: white !important;
+}
+.error{
+color: red !important;
+}
  
  </style>
 	</head>

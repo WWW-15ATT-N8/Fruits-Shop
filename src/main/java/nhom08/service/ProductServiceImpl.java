@@ -48,5 +48,11 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.getProductsFilter(name, categoryID, newProduct, bestSaler, rangePrice, rangeStock);
 	}
 	
+	@Override
+	@Transactional
+	public List<Product> getProductsbyDK(String dk) {
+		return productDao.getProductsbyDK(dk);
+	}
+	
 
 }

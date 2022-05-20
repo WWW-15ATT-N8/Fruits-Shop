@@ -46,8 +46,8 @@
 				<li class="nav-item "><a class="nav-link" id="navbar-btn-traicaynhapkhau"
 					href="${pageContext.request.contextPath}/category/id=4">Trái cây nhập khẩu</a></li>
 				<li class="nav-item dropdown" id="navbar-btn-quatang"><a
-					class="nav-link dropdown-toggle" href=""
-					id="dropdownId" aria-haspopup="true" aria-expanded="false">Sản phẩm khác</a>
+					class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/product/list/page=1"
+					id="dropdownId" aria-haspopup="true" aria-expanded="false">Danh mục sản phẩm</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownId">
 						<%-- <%
 							List<Category> categories = (List<Category>)session.getAttribute("category");

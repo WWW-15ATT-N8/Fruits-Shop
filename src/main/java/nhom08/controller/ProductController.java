@@ -30,13 +30,12 @@ public class ProductController {
 	private ProductService productService;
 
 	@Autowired
-	private ImageService imageService;;
+	private ImageService imageService;
 
 	@GetMapping("/id={productID}")
 	public String getProduct(@PathVariable int productID, Model theModel) {
 
 		Product product = productService.getProduct(productID);
-		System.out.println("hihi " + product);
 		if (product == null) {
 			throw new RuntimeException("Không tìm thấy id  product : " + productID);
 		}
@@ -62,6 +61,40 @@ public class ProductController {
 		theModel.addAttribute("desc", product.getDescription());
 		theModel.addAttribute("sam_product", products);
 		return "customer/ChiTietSanPham";
+	}
+	
+	@GetMapping({"/list/page={pages}","/danh-sach/page={pages}"})
+	public String listAllProduct(@PathVariable int pages, Model model ,HttpServletRequest request, HttpSession session) {
+		
+		int filter = 1;
+		if(request.getParameter("orderby") != null) {
+			filter = Integer.valueOf(request.getParameter("orderby"));
+			session.setAttribute("orderby", filter);
+		}else {
+			if(session.getAttribute("orderby") != null)
+				filter = (int)session.getAttribute("orderby");
+		}
+
+		int cnt = 0;
+		List<Product> products;
+		if(filter == 1)
+			products = productService.getProducts();
+		else if(filter == 2)
+			products = productService.getProductsbyDK(" order by price asc");
+		else
+			products = productService.getProductsbyDK(" order by price desc");
+		
+		List<Product> products_2 = new ArrayList<Product>();
+		for (Product p : products) {
+			if (cnt > (pages - 1) * 8 && cnt <= pages * 8)
+				products_2.add(p);
+			cnt++;
+		}
+		
+		model.addAttribute("products", products_2);
+		model.addAttribute("size_product", cnt);
+		model.addAttribute("page", pages);
+		return "customer/DanhSachSanPham";
 	}
 
 }

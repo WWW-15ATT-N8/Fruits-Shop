@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import nhom08.entity.Order;
+import nhom08.entity.Product;
 
 public interface OrderService {
 	public List<Order> getOrders();

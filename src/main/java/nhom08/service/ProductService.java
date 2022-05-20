@@ -11,4 +11,5 @@ public interface ProductService {
 	public void saveProduct(Product product);
 	public Product getProduct(int id);
 	public void deleteProduct(int id);
+	public List<Product> getProductsbyDK(String dk);
 }

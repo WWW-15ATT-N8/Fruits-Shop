@@ -77,4 +77,13 @@ public class ProductDaoImpl implements ProductDao {
 		return products;
 	}
 
+	@Override
+	@Transactional
+	public List<Product> getProductsbyDK(String dk) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		Query<Product> query = currentSession.createQuery("from Products " + dk , Product.class);
+		List<Product> Products = query.getResultList();
+		return Products;
+	}
+
 }
