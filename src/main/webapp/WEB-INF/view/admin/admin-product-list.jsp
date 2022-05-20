@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Insert title here</title>
+<title>Sản phẩm</title>
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 <link rel="stylesheet" type="text/css"
@@ -21,7 +21,6 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.1/css/OverlayScrollbars.min.css">
-
 </head>
 <%
 request.setCharacterEncoding("UTF-8");
@@ -43,7 +42,10 @@ response.setCharacterEncoding("UTF-8");
 						</div>
 						<div class="col-sm-6">
 							<jsp:include page="partial/breadcrumb.jsp">
-								<jsp:param name="item_sub" value="Home" />
+								<jsp:param name="item_sub" value="Dashboard" />
+								<jsp:param
+									value="${pageContext.request.contextPath}/admin/dashboard"
+									name="item_sub_src" />
 								<jsp:param name="item_main" value="Sản phẩm" />
 							</jsp:include>
 						</div>
@@ -60,7 +62,7 @@ response.setCharacterEncoding("UTF-8");
 									data-target=".collapse" data-card-widget="collapse"
 									style="cursor: pointer;">
 									<div class="card-title">
-										<i class="fa-solid fa-magnifying-glass"></i> Search
+										<i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
 									</div>
 									<div class="card-tools">
 										<button data-card-widget="collapse" type="button"
@@ -69,41 +71,43 @@ response.setCharacterEncoding("UTF-8");
 										</button>
 									</div>
 								</div>
-								
-									<div class="card-body collapse show">
+
+								<div class="card-body collapse show">
 									<form>
 										<div class="row">
 											<div class="col-6">
 												<div class="form-group">
-													<label>Name:</label> <input name="name"
+													<label>Tên sản phẩm:</label> <input name="name"
 														value='<%=request.getParameter("name") == null ? "" : request.getParameter("name")%>'
 														class="form-control" style="width: 100%;"
-														placeholder="Name">
+														placeholder="Nhập tên sản phẩm">
 												</div>
 
 												<div class="form-group">
-													<label>Is new product:</label> <select class="form-control"
-														name="newProduct" style="width: 100%;">
+													<label>Có phải sản phẩm mới:</label> <select
+														class="form-control" name="newProduct"
+														style="width: 100%;">
 														<% if( request.getAttribute("newProduct") != null) {%>
-															<option <%= request.getAttribute("newProduct").equals("all") ? "selected='selected'" : "" %> value="all">~~ All ~~</option>
-															<option
-																${ newProduct == true ? 'selected="selected"' : '' }
-																value="true">New Product</option>
-															<option
-																<% if(!request.getAttribute("newProduct").equals("all")) {%> ${ newProduct == false ? 'selected="selected"' : '' }<%} %>
-																value="false">None New Product</option>
+														<option
+															<%= request.getAttribute("newProduct").equals("all") ? "selected='selected'" : "" %>
+															value="all">~~ Tất cả ~~</option>
+														<option
+															${ newProduct == true ? 'selected="selected"' : '' }
+															value="true">Sản phẩm mới</option>
+														<option
+															<% if(!request.getAttribute("newProduct").equals("all")) {%> ${ newProduct==
+															false ? 'selected="selected" ' : '' }<%} %> value="false">Không
+															phải sản phẩm mới</option>
 														<%} else {%>
-															<option value="all">~~ All ~~</option>
-															<option
-																value="true">New Product</option>
-															<option
-																value="false">None New Product</option>
-														
+														<option value="all">~~ Tất cả ~~</option>
+														<option value="true">Sản phẩm mới</option>
+														<option value="false">Không phải sản phẩm mới</option>
+
 														<%} %>
 													</select>
 												</div>
 												<div class="form-group">
-													<label>Price:</label>
+													<label>Giá sản phẩm:</label>
 													<div>
 														<input id="product-price" type="text" name="price"
 															class="js-range-slider"
@@ -114,32 +118,31 @@ response.setCharacterEncoding("UTF-8");
 
 											<div class="col-6">
 												<div class="form-group">
-													<label>Is best saler:</label> 
-													<select class="form-control"
-														name="bestSaler" style="width: 100%;">
+													<label>Sản phẩm đang bán chạy :</label> <select
+														class="form-control" name="bestSaler" style="width: 100%;">
 														<% if( request.getAttribute("bestSaler") != null) {%>
-															<option <%=  request.getAttribute("bestSaler").equals("all") ? "selected='selected'" : "" %> value="all">~~ All ~~</option>
-															<option
-																${  bestSaler == true ? 'selected="selected"' : '' }
-																value="true">Best Saler</option>
-															<option
-																<% if(!request.getAttribute("bestSaler").equals("all")) {%> ${ bestSaler == false ? 'selected="selected"' : '' }<%} %>
-																value="false">None Best Saler</option>
+														<option
+															<%=  request.getAttribute("bestSaler").equals("all") ? "selected='selected'" : "" %>
+															value="all">~~ Tất cả ~~</option>
+														<option
+															${  bestSaler == true ? 'selected="selected"' : '' }
+															value="true">Sản phẩm bán chạy</option>
+														<option
+															<% if(!request.getAttribute("bestSaler").equals("all")) {%> ${ bestSaler==
+															false ? 'selected="selected" ' : '' }<%} %> value="false">Sản
+															phẩm không bán chạy</option>
 														<%} else {%>
-															<option value="all">~~ All ~~</option>
-															<option
-																value="true">Best Saler</option>
-															<option
-																value="false">None Best Saler</option>
-														
+														<option value="all">~~ Tất cả ~~</option>
+														<option value="true">Sản phẩm bán chạy</option>
+														<option value="false">Sản phẩm không bán chạy</option>
+
 														<%} %>
 													</select>
 												</div>
 												<div class="form-group">
-													<label>Category:</label> 
-													<select class="form-control"
+													<label>Loại sản phẩm:</label> <select class="form-control"
 														name="category" style="width: 100%;">
-														<option value="-1">~~ All ~~</option>
+														<option value="-1">~~ Tất cả ~~</option>
 														<c:forEach items="${categories}" var="category">
 															<option
 																${ categoryID == category.categoryID ? 'selected="selected"' : '' }
@@ -148,7 +151,7 @@ response.setCharacterEncoding("UTF-8");
 													</select>
 												</div>
 												<div class="form-group">
-													<label>Stock:</label>
+													<label>Số lượng sản phẩm:</label>
 													<div>
 														<input id="product-stock" type="text" name="stock"
 															class="js-range-slider"
@@ -157,42 +160,32 @@ response.setCharacterEncoding("UTF-8");
 												</div>
 											</div>
 										</div>
-										<button class="btn btn-primary btn-search"
-												style="width: 40%;" type="submit">
-												<i class="fa-solid fa-magnifying-glass"></i> Search
-											</button>
-											</form>
+										<div class="row">
+											<div class="col-12 text-center">
+												<button type="submit" class="btn btn-primary btn-search">
+													<i class="fa-solid fa-magnifying-glass"></i> Search
+												</button>
+
+											</div>
+										</div>
+									</form>
 								</div>
 							</div>
-							
+
 							<div class="card">
 								<div class="card-header">
-									<div class="card-title">Table</div>
+									<div class="card-title">Danh sách sản phẩm</div>
 									<div class="card-tools">
-										<button class="btn btn-danger mr-2">Delete Selected</button>
 										<a class="btn btn-primary"
 											href="${pageContext.request.contextPath}/admin/product/create"
-											style="color: white;">Add</a>
-	
+											style="color: white;">Thêm sản phẩm</a>
+
 									</div>
 								</div>
 								<div class="card-body">
-									<div>
-										<label>Show 
-										<select name="example_length"
-												aria-controls="example" class="">
-												<option value="10">10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
-										</select> entries
-										</label>
-									</div>
 									<table class="table table-bordered table-hover data-table-form">
 										<thead>
 											<tr>
-												<th style="width: 70px;" class="text-center"><input
-													type="checkbox"></th>
 												<th class="text-capitalize">Name</th>
 												<th class="text-capitalize">Price</th>
 												<th class="text-capitalize">Stock</th>
@@ -201,7 +194,7 @@ response.setCharacterEncoding("UTF-8");
 												<th class="text-capitalize">Category</th>
 												<th style="width: 130px;" class="text-capitalize text-right">Action</th>
 											</tr>
-									</thead>
+										</thead>
 										<tbody>
 											<c:forEach items="${products.pageList}" var="product">
 												<c:url var="deleteProduct" value="/admin/product/delete">
@@ -211,8 +204,7 @@ response.setCharacterEncoding("UTF-8");
 													<c:param name="productID" value="${product.productID}" />
 												</c:url>
 												<tr>
-													<td class="text-center check-item"><input
-														type="checkbox"></td>
+
 													<td>${ product.name }</td>
 													<td>${ product.price }</td>
 													<td>${ product.stock }</td>

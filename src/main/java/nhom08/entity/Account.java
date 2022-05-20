@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity(name = "Accounts")
 @Table(name = "Accounts")
@@ -22,8 +24,15 @@ public class Account implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int accountID;
+	
+	@NotNull(message = "* Số điện thoại không được để trống")
+	@Pattern(regexp = "^0[0-9]{9}", message = "* Số điện thoại phải có 10 kí tự bắt đầu bằng 0")
 	private String phone;
+	
+	@NotNull(message = "* Mật khẩu không được để trống")
+//	@Pattern(regexp = "\"^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$\"", message = "* Mật khẩu cần tối thiểu 8 kí tử, ít nhất một chữ cái và một số")
 	private String password;
+	
 	private int enabled;
 
 	@ManyToOne

@@ -38,12 +38,12 @@ public class Order implements Serializable {
 	private double total;
 	
 	@Column(name = "shipAddress")
-	@NotNull(message = "is required")
+	@NotNull(message = "* Địa chỉ không được để trống")
 	@Size(min = 1, message = "is required")
 	private String shipAddress;
 	
-	@NotNull(message = "is required")
-	@Pattern(regexp = "^0[0-9]{9}", message = "* Số điện thoại có đúng 10 kí tự số")
+	@NotNull(message = "* Số điện thoại không được để trống")
+	@Pattern(regexp = "^0[0-9]{9}", message = "* Số điện thoại phải có 10 kí tự bắt đầu bằng 0")
 	private String shipPhone;
 	
 	private String comment;

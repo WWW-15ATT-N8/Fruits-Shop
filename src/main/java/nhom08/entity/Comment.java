@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name= "Comments" )
@@ -21,13 +22,21 @@ public class Comment implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String commentID;
+	
 	@Column(name = "rate")
+	@NotNull(message = "* Đánh giá không được để trống")
 	private double rate;
+	
 	@Column(name="[content]")
+	@NotNull(message = "* Nội dung không được để trống")
 	private String content;
+	
 	@Column(name = "email")
+	@NotNull(message = "* Email không được để trống")
 	private String email;
+	
 	@Column(name = "userName")
+	@NotNull(message = "* Tên không được để trống")
 	private String userName;
 	
 	@ManyToOne

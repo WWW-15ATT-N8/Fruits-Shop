@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity(name = "Statuses")
 @Table(name = "Statuses")
@@ -21,7 +22,10 @@ public class Status implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int statusID;
+	
+	@NotNull(message = "* Tên không được để trống")
 	private String name;
+	
 	private String description;
 	
 	@OneToMany(mappedBy = "status")
