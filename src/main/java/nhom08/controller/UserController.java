@@ -240,8 +240,9 @@ public class UserController {
 		theOrder.setStatus(new Status(1));
 		theOrder.setDiscount(0.0f);
 		theOrder.setOrder_Details(details);
+		theOrder.setTotal(theOrder.getThanhTien());
 
-//		System.out.println(theOrder);
+
 		orderService.saveOrder(theOrder);
 		for(Cart c : carts) 
 			cartService.deleteCart(c);

@@ -99,21 +99,13 @@ public class AdminController {
 			User u = new User();
 			String phone = authentication.getName();
 			u = userService.getUserbyPhone(phone);
-			double total = 0.0;
-			
-				
 			session.setAttribute("USER",u);
-			session.setAttribute("total",total);
-		}
-		
-		if(session.getAttribute("category") == null) {
-			List<Category> categories = categoryService.getCategories();
-			session.setAttribute("category", categories);
 		}
 	}
 	
 	@GetMapping({"/product","/product/","/product/list"})
-	public String list(HttpServletRequest request, Model model) {
+	public String list(HttpServletRequest request, HttpSession session, Model model) {
+		loadUser(request, session);
 		List<Product> products = null;
 		List<Category> categories = categoryService.getCategories();
         // add the customers to the model
@@ -215,9 +207,9 @@ public class AdminController {
 
 	
 	@GetMapping({"/category", "/category/", "/category/list"})
-	public String listCategory(HttpServletRequest request, Model model) {
+	public String listCategory(HttpServletRequest request, HttpSession session, Model model) {
         // add the customers to the model
-		
+		loadUser(request, session);
 		List<Category> categories = null;
 		List<Category> categoriesFilter = new ArrayList<Category>();
 		if (request.getParameter("name") != null || request.getParameter("rangeNumOfProduct") != null) {
@@ -340,7 +332,8 @@ public class AdminController {
 	}
 	
 	@GetMapping({"/order","/order/","/order/list"})
-	public String listOrder(HttpServletRequest request, Model model) {
+	public String listOrder(HttpServletRequest request, HttpSession session, Model model) {
+		loadUser(request, session);
 		List<Order> orders;
 		if (request.getParameter("phone") != null && request.getParameter("statusID") != null && request.getParameter("filter") != null ) {
 			int statusID = Integer.parseInt(request.getParameter("statusID"));
@@ -398,7 +391,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("/order/detail")
-	public String getOrder(@RequestParam("orderID") int orderID, Model theModel) {
+	public String getOrder(@RequestParam("orderID") int orderID, Model theModel,HttpServletRequest request, HttpSession session) {
+		loadUser(request, session);
 		Order o = orderService.getOrder(orderID);
 		List<Order_Detail> detail = orderDetailService.getOrdersDetailsByOrderID(orderID);
 		
@@ -417,7 +411,8 @@ public class AdminController {
 	}
 	
 	@GetMapping({"/status","/status/","/status/list"})
-	public String getStatus(Model theModel) {
+	public String getStatus(Model theModel,HttpServletRequest request, HttpSession session) {
+		loadUser(request, session);
 		List<Status> list = statusService.getStatuses();
 		
 		theModel.addAttribute("statuses", list );
@@ -426,6 +421,7 @@ public class AdminController {
 	
 	@GetMapping({"/user","/user/","/user/list"})
 	private String listUser(HttpServletRequest request, Model model, HttpSession session) {
+		loadUser(request, session);
 		List<User> users  = new ArrayList<User>();
 		int roleID = 0;
 		if (request.getParameter("fullName") != null || request.getParameter("email") != null ||
@@ -462,13 +458,13 @@ public class AdminController {
 		}
 		
 		
-		User user = (User) session.getAttribute("USER");
-		for (int i = 0; i < users.size(); i++) {
-			if(users.get(i).getUserID() == user.getUserID()) {
-				users.remove(i);
-				break;
-			}
-		}
+//		User user = (User) session.getAttribute("USER");
+//		for (int i = 0; i < users.size(); i++) {
+//			if(users.get(i).getUserID() == user.getUserID()) {
+//				users.remove(i);
+//				break;
+//			}
+//		}
 		List<Role> roles = roleService.getRoles(); 
 		System.out.println(roles);
 		model.addAttribute("roles", roles);
@@ -545,7 +541,8 @@ public class AdminController {
 	}
 	
 	@GetMapping("dashboard")
-	public String dashboard(Model model , HttpSession session) {
+	public String dashboard(Model model , HttpServletRequest request, HttpSession session) {
+		loadUser(request, session);
 		List<Order> orders = orderService.getOrders();
 		int totalOrder = getTotalOrder();
 		int theWatingOrder = getWatingOrder(orders);
