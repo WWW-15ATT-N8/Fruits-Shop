@@ -19,6 +19,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+
 @Entity(name = "Products")
 @Table(name = "Products")
 public class Product implements Serializable {
@@ -68,7 +69,7 @@ public class Product implements Serializable {
 	
 	@OneToMany(mappedBy = "product" ,fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Image> images;
-	
+	 
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Cart> carts;
 	

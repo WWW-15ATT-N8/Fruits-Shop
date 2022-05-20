@@ -13,16 +13,22 @@ import javax.persistence.PostUpdate;
 import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -75,6 +81,12 @@ public class AdminController {
 	@RequestMapping({"", "/", "dashboard"})
 	public String adminPage() {
 		return "redirect:/admin/product/list";
+	}
+	
+	@InitBinder
+	public void initBiner(WebDataBinder dataBinder) {
+		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 	
 	@GetMapping({"/product","/product/","/product/list"})
@@ -136,7 +148,12 @@ public class AdminController {
 	}
 	
 	@PostMapping("/product/save")
-    public String saveProduct(@ModelAttribute("product") Product product, @ModelAttribute("categoryID") int categoryID) {
+    public String saveProduct(
+    		@ModelAttribute("categoryID") int categoryID,
+    		@Valid @ModelAttribute("product") Product product,  
+    		BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) 
+			return "redirect:/admin/product/create";
 		System.out.println(categoryID);
 		Category category = categoryService.getCategory(categoryID);
 		product.setCategory(category);
@@ -145,7 +162,7 @@ public class AdminController {
     }
 	
 	@GetMapping("/product/update")
-	public String update(@RequestParam("productID") int id, Model model) {
+	public String updateProduct(@RequestParam("productID") int id, Model model) {
 		Product product = productService.getProduct(id);
 		List<Category> categories = categoryService.getCategories();
 		model.addAttribute("categories", categories);
@@ -173,6 +190,7 @@ public class AdminController {
 	@GetMapping({"/category", "/category/", "/category/list"})
 	public String listCategory(HttpServletRequest request, Model model) {
         // add the customers to the model
+		
 		List<Category> categories = null;
 		List<Category> categoriesFilter = new ArrayList<Category>();
 		if (request.getParameter("name") != null || request.getParameter("rangeNumOfProduct") != null) {
@@ -222,7 +240,9 @@ public class AdminController {
 	}
 	
 	@PostMapping("/category/save")
-    public String saveCategory(@ModelAttribute("category") Category category) {
+    public String saveCategory(@Valid @ModelAttribute("category") Category category, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) 
+			return "admin/admin-category-form";
 		
         categoryService.saveCategory(category);
         return "redirect:/admin/category/list";
@@ -251,7 +271,6 @@ public class AdminController {
 
 	@RequestMapping(value = "/image/save")  
 	public String upload(@RequestParam(name="files") MultipartFile[] files, @RequestParam(name="productID") int productID, HttpServletRequest request, Model model){  
-		System.out.println("ơ không zo dc thiệt lun");
 		Product product = productService.getProduct(productID);
 		List<Image> images = imageService.getImagesByProductID(productID);
 		if (images.size() != 0) {
@@ -259,9 +278,8 @@ public class AdminController {
 				imageService.deleteImage(image);
 			}
 		}
-		System.out.println("chưa vô dc nha");
+
 		for (MultipartFile file : files) {
-			System.out.println("Vô dc nha");
 			String src = PATH_STORE_ROOT+saveImage(file, request);
 			imageService.saveImage(new Image(src, product));
 		}
@@ -441,8 +459,10 @@ public class AdminController {
 	}
 	
 	@PostMapping("/user/save")
-    public String saveUser(@ModelAttribute("user") User user, @RequestParam("roleID") int roleID, 
-    		@RequestParam("password") String password) {
+    public String saveUser( @RequestParam("roleID") int roleID, 
+    		 @RequestParam("password") String password, @Valid @ModelAttribute("user") User user, BindingResult bindingResult ) {
+		if (bindingResult.hasErrors()) 
+			return "redirect:/admin/user/create";
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
 		Account account = new Account(user.getPhone(),"{bcrypt}"+encoder.encode(password), roleService.getRole(roleID));
 		accountService.saveAccount(account);
@@ -503,7 +523,10 @@ public class AdminController {
 			double total = 0;
 			List<Order> ordersByDay = orderService.getOrdersByDate(new java.sql.Date(time));
 			for (Order order : ordersByDay) {
-				total += order.getTotal();
+				if (order.getStatus().getStatusID() == 5) {
+					total += order.getTotal();
+				}
+				
 			}
 			priceInDay.add(total);
 		}
@@ -569,10 +592,10 @@ public class AdminController {
 
 	private int getWatingOrder(List<Order> orders) {
 		int totalOrders = 0;
-		int statusDaHuy = 4;
-		int statusThanhCong = 5;
+//		int statusDaHuy = 4;
+//		int statusThanhCong = 5;
 		for (Order order : orders) {
-			if (order.getStatus().getStatusID() != statusDaHuy &&  order.getStatus().getStatusID() != statusThanhCong) {
+			if (order.getStatus().getStatusID() == 1) {
 				totalOrders ++;
 			}
 		}

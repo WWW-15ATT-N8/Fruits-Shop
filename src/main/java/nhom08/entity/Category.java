@@ -28,7 +28,8 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int categoryID;
 	
-	@NotNull(message = "* Tên loại không được để trống")
+
+	@NotNull(message = "* Tên loại sản phẩm không được để trống")
 	private String name;
 	
 	private String description;

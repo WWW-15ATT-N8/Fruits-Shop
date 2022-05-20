@@ -24,8 +24,8 @@ public class Image implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String imageID;
 	
-	@NotNull(message = "Đường dẫn không được để trống")
 	@Column(name = "src")
+	@NotNull(message = "* Đường dẫn không được để trống")
 	private String src;
 	
 	@ManyToOne

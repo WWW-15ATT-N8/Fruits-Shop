@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity(name = "Users")
 @Table(name = "Users")
@@ -21,14 +22,20 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userID;
+	
 	@NotNull(message = "* Tên không được để trống")
 	private String fullName;
+	
 	@NotNull(message = "* Địa chỉ không được để trống")
 	private String address;
+	
 	@NotNull(message = "* Email không được để trống")
 	private String email;
+	
 	@NotNull(message = "* Số điện thoại không được để trống")
+	@Pattern(regexp = "^0[0-9]{9}", message = "* Số điện thoại phải có 10 kí tự bắt đầu bằng 0")
 	private String phone;
+	
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Cart> carts;

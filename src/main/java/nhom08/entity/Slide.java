@@ -13,9 +13,11 @@ public class Slide {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int slideID;
-	@NotNull(message = "* Hình ảnh được để trống")
+
 	@Column(name = "image")
+	@NotNull(message = "* Hình ảnh không được để trống")
 	private String image;
+	
 	public int getSlideId() {
 		return slideID;
 	}
