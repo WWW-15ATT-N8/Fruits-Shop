@@ -56,7 +56,9 @@
 							</div>
 						</div>
 						<div class="product-name">
-							<p id="path">TRANG CHỦ / ${category.name}</p>
+			
+							<p  id="path"><font color="black"><a href="${pageContext.request.contextPath}">TRANG CHỦ </a>/
+				<a href="${pageContext.request.contextPath}/category/id=${category.categoryID}">${category.name} </a></font></p>
 							<hr>
 							<h1 id="product-name-title">${product.name}</h1>
 							<p id="product-name-price"><fmt:formatNumber value = "${product.price}" type = "number" maxFractionDigits = "0"/> ₫</p>

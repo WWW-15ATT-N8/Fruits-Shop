@@ -27,13 +27,17 @@
 	        <script src="../js/functionsHandle.js"></script>
 	        <script src="../js/regex.js"></script>
 	        <script src="../js/search.js"></script>  -->
+	        <style>
+        a {
+            color: black;
+        }
+        </style>
 
 </head>
 <body>
 	<div class="wrapper">
 
 		<jsp:include page="Navbar.jsp"></jsp:include>
-
 
 
 		<%
@@ -47,7 +51,9 @@
 		
 		
 			<div class="row" id= "title-ds">
-				<div class="col-6" id="path-ds">TRANG CHỦ / ${category.name} / PAGE ${page}</div>
+			
+				<div class="col-6" id="path-ds"><font color="black"><a href="${pageContext.request.contextPath}">TRANG CHỦ </a>/
+				<a href="${pageContext.request.contextPath}/category/id=${category.categoryID}">${category.name} </a>/ PAGE ${page}</font></div>
 				  <div class="col-3" id="sl-ds">Hiển thị <%= (pageID-1)*8 + 1%>-<%= pageID*8%> của <%= sl_product%> kết quả</div>
 				  <div class="col-3" id="filter-ds">
 					  	<select name="orderby" class="orderby" aria-label="Đơn hàng của cửa hàng" id="filter">
