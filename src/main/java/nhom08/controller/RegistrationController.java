@@ -1,11 +1,17 @@
 package nhom08.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +35,12 @@ public class RegistrationController {
 	
 	private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
+	@InitBinder
+	public void initBiner(WebDataBinder dataBinder) {
+		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+	}
+	
 	@GetMapping({"","/"})
 	public String registration(@ModelAttribute("Account") Account account, Model theModel ) {
 		
@@ -37,8 +49,12 @@ public class RegistrationController {
 	}
 	
 	@PostMapping("/processRegistrationForm")
-	public String processRegistrationForm(
-			@ModelAttribute("Account") Account account,	Model theModel) {
+	public String processRegistrationForm(@Valid @ModelAttribute("Account") Account account, BindingResult bindingResult,
+			Model theModel) {
+		if (bindingResult.hasErrors()) {
+			theModel.addAttribute("Account", account);
+			return "Registration";
+		}
 		String phone = account.getPhone();
 		String password = account.getPassword();
 		

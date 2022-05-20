@@ -548,8 +548,6 @@ public class AdminController {
 		return "admin/dashboard";
 	}
 	
-
-	
 	private List<Long> getLastDate(int size) {
 		long getTime = new Date().getTime();
 		List<Long> dates = new ArrayList<Long>();

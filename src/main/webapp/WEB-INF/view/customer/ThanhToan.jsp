@@ -20,6 +20,7 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Navbar.css" type="text/css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Footer.css" type="text/css">
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ThanhToan.css" type="text/css">
@@ -27,6 +28,11 @@
 		        <script src="../js/functionsHandle.js"></script>
 		        <script src="../js/regex.js"></script>
 		        <script src="../js/search.js"></script>  -->	
+<style type="text/css">
+.error{
+color: red !important;
+}
+</style>
 	</head>
 	<body>
 		<div class="wrapper">
@@ -49,7 +55,7 @@
                     	<c:url var="saveOrder" value="/user/order/saveorder?${_csrf.parameterName}=${_csrf.token}"></c:url>
                     	
                         <form:form class="thanhtoan"  action="${saveOrder}" modelAttribute="Order" method="post" >
-                        <input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
+                        	<input type="hidden" name="${_csrf.parameterName}"  value="${_csrf.token}" />
                         	<form:input type="hidden" path="total"  value="<%= total%>"/>
                             <p id="tt-tt">Thông tin thanh toán</p>
                            <div class="row">
@@ -75,15 +81,15 @@
                             <div class="row">
                                 <div class="col-12">
                                     <label>Địa chỉ nhận hàng: </label>
-                                    <form:input path="shipAddress"  type="text" id="thanhtoan-add" value="<%= USER.getAddress()%>"/>
-                                   	<br><form:errors cssClass="error" class="form-text note" path="shipAddress" />
+                                    <form:input path="shipAddress"  type="text" id="thanhtoan-add" />
+                                   	<br><form:errors cssClass="error" class="form-text note" path="shipAddress"/>
                                     <!-- <small id="thanhtoan-add-note" class="form-text note"></small> -->
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
                                     <label>Số điện thoại nhận hàng: </label><br/>
-                                    <form:input path="shipPhone"  type="text" id="thanhtoan-tel" value="<%= USER.getPhone()%>" />
+                                    <form:input path="shipPhone"  type="text" id="thanhtoan-tel" />
                                     <br><form:errors  cssClass="error" class="form-text note" path="shipPhone" />
                                    <!--  <small id="thanhtoan-tel-note" class="form-text note"></small> -->
                                 </div>

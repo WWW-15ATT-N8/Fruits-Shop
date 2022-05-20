@@ -22,6 +22,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Navbar.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Footer.css" type="text/css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/ChiTietSanPham.css" type="text/css">
@@ -56,7 +57,10 @@
 							</div>
 						</div>
 						<div class="product-name">
-							<p id="path">TRANG CHỦ / ${category.name}</p>
+							<p  id="path" style="color: #dcd0ca;" >
+									<a style="color: #dcd0ca;" href="${pageContext.request.contextPath}/">TRANG CHỦ </a> /
+									<a style="color: #dcd0ca;" href="${pageContext.request.contextPath}/category/id=${category.categoryID}">${category.name} </a>
+							</p>
 							<hr>
 							<h1 id="product-name-title">${product.name}</h1>
 							<p id="product-name-price"><fmt:formatNumber value = "${product.price}" type = "number" maxFractionDigits = "0"/> ₫</p>
@@ -73,6 +77,10 @@
 								<input type="button" value="+" id="up" onclick="changeValueGH(1)"> 
 								<input type="submit" value="Thêm vào giỏ" id="themGioHang">
 							</form>
+							 <c:if test="${addcartError != null}">
+								<div class="alert alert-danger col-xs-offset-1 col-xs-10">
+									${addcartError}</div>
+							</c:if>
 							<hr>
 							<p id="danhmuc">
 							Loại sản phẩm: ${category.name}

@@ -19,6 +19,7 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Navbar.css" type="text/css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Footer.css" type="text/css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Home.css" type="text/css">
@@ -57,6 +58,8 @@
 		
 		#chitiethoadon .donhang-btn{
 			text-align: right !important;
+		}#navbar-btn-home{
+		    color: white !important;
 		}
 		
 	 
@@ -71,8 +74,17 @@
 			 	Order o = (Order)request.getAttribute("ORDER");
 			%>
 			<div class="row">
+				<h5 class="col-12"><a href="${pageContext.request.contextPath}/" style="color: black;">TRANG CHỦ</a> / <a style="color: black;" href="${pageContext.request.contextPath}/user/order/list">DANH SÁCH HÓA ĐƠN</a></h5>
+				
 				<p style="padding: 0.75rem;font-size: 1.1em;font-weight: 500;">Đơn hàng <b>&num;<%= o.getOrderID()%></b> đã đặt vào <b> ngày <%= o.getCreatedDate().getDate()%> tháng <%= o.getCreatedDate().getMonth()%> 
 				năm <%= o.getCreatedDate().getYear() + 1900%></b> và tình trạng hiện tại là <b><%= o.getStatus().getName()%></b></p>
+				<c:if test="${deleteSuccess != null}">
+					<div class="col-12">
+						<div class="alert alert-success col-xs-offset-1 col-xs-10" style="text-align: center;">
+							${deleteSuccess}
+						</div>
+					</div>
+				</c:if>
 				<table class="table">
 			  <thead>
 			  	<tr><th colspan="6" class="thead-dark" style="font-size: 2em; color: #878787;">Chi tiết đơn hàng</th></tr>
@@ -117,9 +129,24 @@
 			  	<tr><th colspan="6"></th></tr>
 			  </tfoot>
 			</table>
-			<p style="padding: 0.75rem;font-size: 1.1em;font-weight: 500;"><b>Số điện thoại nhận hàng:</b> <%= o.getShipPhone()%></p>
+			<p style="padding: 0.75rem;font-size: 1.1em;font-weight: 500;" class="col-12"><b>Số điện thoại nhận hàng:</b> <%= o.getShipPhone()%></p>
 			</br>
-			<p style="padding: 0.75rem;font-size: 1.1em;font-weight: 500;"><b>Địa chỉ giao hàng:</b> <%= o.getShipAddress()%></p>
+			<p style="padding: 0.75rem;font-size: 1.1em;font-weight: 500;" class="col-12"><b>Địa chỉ giao hàng:</b> <%= o.getShipAddress()%></p>
+			<c:if test="${deleteError != null}">
+				<div class="col-12">
+					<div class="alert alert-danger col-xs-offset-1 col-xs-10" style="text-align: center;">
+						${deleteError}
+					</div>
+				</div>
+			</c:if>
+			<c:if test="${ORDER.status.statusID < 3}">
+				<a class="btn btn-danger col-3" href="${pageContext.request.contextPath}/user/order/delete/id=${ORDER.orderID}" >Hủy đơn hàng</a>
+			</c:if>
+			<c:if test="${ORDER.status.statusID >= 3}">
+				<div class="alert alert-danger col-xs-offset-1 col-xs-10" style="text-align: center;">
+						Không thể hủy do đơn hàng <%= o.getStatus().getName()%>
+					</div>
+			</c:if>
 			</div>
 		</div>
 		<jsp:include page="Footer.jsp"></jsp:include>

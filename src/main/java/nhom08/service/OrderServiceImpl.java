@@ -12,6 +12,7 @@ import nhom08.dao.OrderDAO;
 import nhom08.dao.OrderDetailDAO;
 import nhom08.entity.Order;
 import nhom08.entity.Order_Detail;
+import nhom08.entity.Product;
 
 @Service
 public class OrderServiceImpl implements OrderService{

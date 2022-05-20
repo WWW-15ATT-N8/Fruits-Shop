@@ -30,6 +30,7 @@ public class Account implements Serializable {
 	private String phone;
 	
 	@NotNull(message = "* Mật khẩu không được để trống")
+	@Pattern(regexp = "^[@#$%^&+=a-zA-Z0-9]{6,}", message = "* Mật khẩu có ít nhất 6 kí tự")
 	private String password;
 	
 	private int enabled;

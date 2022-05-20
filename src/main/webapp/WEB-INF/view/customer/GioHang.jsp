@@ -26,6 +26,7 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/GioHang.css"
 	type="text/css">
@@ -95,6 +96,10 @@
 								</c:forEach>
 							</tbody>
 						</table>
+						 <c:if test="${updatecartError != null}">
+							<div class="alert alert-danger col-xs-offset-1 col-xs-10">
+								${updatecartError}</div>
+						</c:if>
 						<%
 							if(carts != null )
 								if(carts.size() > 0)

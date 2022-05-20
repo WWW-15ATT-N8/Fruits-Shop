@@ -32,7 +32,7 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int productID;
 	
-	@NotNull(message = "Tên thiệp không được để trống")
+	@NotNull(message = "Tên sản phẩm không được để trống")
 	private String name;
 	
 	@NotNull(message = "Giá không được trống")
