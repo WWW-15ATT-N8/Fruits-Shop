@@ -47,9 +47,9 @@ public class UserServiceImpl  implements UserService{
 
 	@Override
 	@Transactional
-	public List<User> getUsersFilter(String fullName, String address, String phone, String email) {
+	public List<User> getUsersFilter(String fullName, String phone, String email) {
 		// TODO Auto-generated method stub
-		return userDAO.getUsersFilter(fullName, address, phone, email);
+		return userDAO.getUsersFilter(fullName, phone, email);
 	}
 
 }

@@ -22,7 +22,7 @@ public class Image implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String imageID;
+	private int imageID;
 	
 	@Column(name = "src")
 	@NotNull(message = "* Đường dẫn không được để trống")
@@ -37,16 +37,16 @@ public class Image implements Serializable {
 		this.src = src;
 		this.product = product;
 	}
-	public Image(String imageID, String src, Product product) {
+	public Image(int imageID, String src, Product product) {
 		super();
 		this.imageID = imageID;
 		this.src = src;
 		this.product = product;
 	}
-	public String getImageId() {
+	public int getImageId() {
 		return imageID;
 	}
-	public void setImageId(String imageID) {
+	public void setImageId(int imageID) {
 		this.imageID = imageID;
 	}
 	public String getSrc() {
@@ -64,6 +64,12 @@ public class Image implements Serializable {
 	public Image() {
 		super();
 	}
+	@Override
+	public String toString() {
+		return "Image [imageID=" + imageID + ", src=" + src + " ]";
+	}
+	
+	
 	
 	
 }

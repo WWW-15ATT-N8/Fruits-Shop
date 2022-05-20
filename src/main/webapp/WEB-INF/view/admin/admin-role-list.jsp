@@ -1,3 +1,4 @@
+<%@page import="nhom08.entity.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -29,6 +30,7 @@ response.setCharacterEncoding("UTF-8");
 <body>
 	<jsp:include page="partial/navbar.jsp"></jsp:include>
 	<jsp:include page="partial/asidebar.jsp"></jsp:include>
+
 	<div class="content-wrapper">
 		<div class="content-header">
 			<div class="container-fluid">
