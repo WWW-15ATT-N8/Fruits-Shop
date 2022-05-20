@@ -1,3 +1,4 @@
+<%@page import="nhom08.entity.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
@@ -33,6 +34,7 @@
 			<jsp:include page="Navbar.jsp"></jsp:include>
 	
 			<% 
+				User USER = (User)session.getAttribute("USER");
 				List<Cart> carts = (List<Cart>)request.getAttribute("carts"); 
 				int cnt = 0;
 				int total = 0;
@@ -46,16 +48,16 @@
                     
                     	<c:url var="saveOrder" value="/user/order/saveorder"></c:url>
                     	
-                        <form:form class="thanhtoan"  action="${saveOrder}" modelAttribute="Order" method="post">
+                        <form:form class="thanhtoan"  action="${saveOrder}" modelAttribute="Order" method="get" >
                         	<form:input type="hidden" path="total"  value="<%= total%>"/>
                             <p id="tt-tt">Thông tin thanh toán</p>
-                            <div class="row">
+                           <%--  <div class="row">
                                 <div class="col-12">
                                     <label>Họ và tên: </label><br/>
-                                    <input name="UName" class="tt-name" type="text" id="thanhtoan-Lname" placeholder="Nguyễn Văn A" >
+                                    <input name="UName" class="tt-name" type="text" id="thanhtoan-Lname" disabled value="<%= USER.getFullName()%>">
                                     <small id="thanhtoan-Lname-note" class="form-text note"></small>
                                 </div>
-                            </div>
+                            </div> --%>
                           <!--   <div class="row">
                                 <div class="col-12">
                                     <label>Thành phố/Tỉnh: </label><br/>
@@ -65,7 +67,7 @@
                             </div> -->
                             <div class="row">
                                 <div class="col-12">
-                                    <label>Địa chỉ: </label>
+                                    <label>Địa chỉ nhận hàng: </label>
                                     <form:input path="shipAddress"  type="text" id="thanhtoan-add" placeholder="13, Đường Nguyễn Văn Bảo, Quận Gò Vấp" />
                                    	<br><form:errors cssClass="error" class="form-text note" path="shipAddress" />
                                     <!-- <small id="thanhtoan-add-note" class="form-text note"></small> -->
@@ -73,7 +75,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <label>Số điện thoại: </label><br/>
+                                    <label>Số điện thoại nhận hàng: </label><br/>
                                     <form:input path="shipPhone"  type="text" id="thanhtoan-tel" placeholder="0xxx-xxx-xxx" />
                                     <br><form:errors  cssClass="error" class="form-text note" path="shipPhone" />
                                    <!--  <small id="thanhtoan-tel-note" class="form-text note"></small> -->
@@ -86,21 +88,21 @@
                                     <small id="thanhtoan-email-note" class="form-text note"></small>
                                 </div>
                             </div> -->
-                           <!--  <div class="row">
-                                <div class="col-12">
-                                    <label>Hình thức thanh toán: </label> <br/>
-                                    <input class="radio" id="tienmat" type="radio"  name="thanhtoan" checked >
-                                    <label for="tienmat">Trả Tiền Mặt Khi Nhận Hàng</label><br>
-                                    <input class="radio" id="nganhang" type="radio"  name="thanhtoan" >
-                                    <label for="nganhang">Chuyển Khoản Ngân Hàng</label><br>
-                                    <input class="radio" id="tragop" type="radio"  name="thanhtoan" >
-                                    <label for="tragop">Thanh Toán Trả Góp Bằng Thẻ Tín Dụng</label>
-                                </div>
-                            </div> -->
                             <div class="row">
                                 <div class="col-12">
                                     <label>Ghi chú đơn hàng (tùy chọn): </label><br/>
                                     <form:textarea path="comment" id="tt-ghichu" cols="71" rows="6" placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay địa điểm giao hàng chi tiết hơn."/>
+                                </div>
+                            </div>
+                           <div class="row">
+                                <div class="col-12">
+                                    <label>Hình thức thanh toán: </label> <br/>
+                                    <input class="radio" id="tienmat" type="radio"  name="thanhtoan" checked >
+                                    <label for="tienmat">Trả Tiền Mặt Khi Nhận Hàng</label><br>
+                                    <!-- <input class="radio" id="nganhang" type="radio"  name="thanhtoan" >
+                                    <label for="nganhang">Chuyển Khoản Ngân Hàng</label><br>
+                                    <input class="radio" id="tragop" type="radio"  name="thanhtoan" >
+                                    <label for="tragop">Thanh Toán Trả Góp Bằng Thẻ Tín Dụng</label> -->
                                 </div>
                             </div>
                             <div class="row">

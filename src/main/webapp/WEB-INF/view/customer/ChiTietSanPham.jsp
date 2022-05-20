@@ -66,7 +66,7 @@
 							</p>
 							<hr>
 							<c:url var="addCart" value="/user/cart/addcart"></c:url>
-							<form class="order" action="${addCart}" method="post">	
+							<form class="order" action="${addCart}" method="get">	
 								<input type="hidden" name="productID" value="${product.productID}" > 
 								<input type="button" value="-" id="down" onclick="changeValueGH(-1)"> 
 								<input type="text" value="1" id="soluong" name='quantity'> 

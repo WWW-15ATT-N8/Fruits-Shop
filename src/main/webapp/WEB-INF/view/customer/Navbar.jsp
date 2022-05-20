@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark sticky-top">
 	<div class="container-fluid">
 		<button class="navbar-toggler d-xl-none" type="button"
@@ -58,10 +59,10 @@
 					</div></li>
 				
 				<li class="nav-item "><a class="nav-link" id="navbar-btn-dichvu"
-					href="${pageContext.request.contextPath}/dichvu">Dịch Vụ</a></li>
-				<li class="nav-item"><a class="nav-link" id="navbar-btn-gioithieu"
+					href="${pageContext.request.contextPath}/dichvu">Giới thiệu</a></li>
+				<%-- <li class="nav-item"><a class="nav-link" id="navbar-btn-gioithieu"
 				href="${pageContext.request.contextPath}/vevinfruits">Về
-						VinFruits</a></li>
+						VinFruits</a></li> --%>
 			</ul>
 			<ul class="navbar-nav  mt-2 mt-lg-0 nav-pc">
 				<li class="nav-item input-search">
@@ -72,45 +73,44 @@
 					</form>
 					<!-- <span class="nav-link bi bi-search" id="search"></span> -->
 				</li>
-				<li class="nav-item" >
-					<%-- <% 
-						double total;
-						if(session.getAttribute("total") == null)
-							total = 0.0;
-						else
-							if(session.getAttribute("USER") == null)
-								total = 0.0;
-							else
-								total = (double)session.getAttribute("total");
-					%> --%>
+				<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')">
+	            	<li class="nav-item" >
 					<a class="nav-link bi bi-cart btn-person-cart-pc" id="icon-cart-pc" href="${pageContext.request.contextPath}/user/cart">
-						<%-- <% if(total > 0){
-							DecimalFormat f = new DecimalFormat("###,###,### ");
-							String tmp = f.format(total);
-							out.println(tmp + "₫");
-						}
-						%> --%>
+						<% 
+							if(session.getAttribute("USER") != null){
+								double total = (double)session.getAttribute("total");
+								DecimalFormat f = new DecimalFormat("###,###,### ");
+								String tmp = f.format(total);
+								if(total>0)
+									out.println(tmp + "₫");
+							}
+						%>
 					</a>
-				</li>
-				<li class="nav-item dropdown">
-					<%
-						User user = (User)session.getAttribute("USER");
-						String str = "";
-						str +="<button type=\"button\" class=\"nav-link dropdown-toggle bi bi-person btn-person-pc\"  id=\"btnLogin\" aria-haspopup=\"true\" aria-expanded=\"false\"></button>" +
-		                       	"<div class=\"dropdown-menu dropdown-menu-right\" aria-labelledby=\"dropdownId\">" ;
-						if(user == null)
-							str +="<a class=\"dropdown-item\" href=\"/fruits-shop/login\">Đăng nhập</a>"
-							+ "<a class=\"dropdown-item\" href=\"/fruits-shop/registration\">Đăng kí</a>";
-						else{
-							if (user.getAccount().getRole().getTitle().equals("ROLE_ADMIN"))
-								str +="<a class=\"dropdown-item\" href=\"/fruits-shop/admin\">Trang quản trị</a>";
-							str +="<a class=\"dropdown-item\" href=\"#\">Thông tin cá nhân</a>"+
-	                          			"<a class=\"dropdown-item\" href=\"#\">Đơn hàng</a>"+
-	                           			"<a class=\"dropdown-item\" href=\"/fruits-shop/logout\">Đăng xuất</a></div>";		
-						}
-						out.println(str);
-					%>
-				</li>
+					</li>
+	            </security:authorize>
+				
+				<security:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')">
+					<li class="nav-item dropdown">
+						<button type="button" class="nav-link dropdown-toggle bi bi-person btn-person-pc"  id="btnLogin" aria-haspopup="true" aria-expanded="false"></button>
+		      				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownId">
+		        				<security:authorize access="hasAnyRole('ADMIN', 'CUSTOMER')">
+								<a class="dropdown-item" href="/fruits-shop/admin">Trang quản trị</a>
+		                    	</security:authorize>
+		       				<a class="dropdown-item" href="/fruits-shop/user/thong-tin-ca-nhan">Thông tin cá nhân</a>
+		       				<a class="dropdown-item" href="/fruits-shop/user/order/list">Đơn hàng</a>
+		       				<a class="dropdown-item" href="/fruits-shop/logout">Đăng xuất</a>
+		      				</div>
+			            
+		            </li>
+	            </security:authorize>
+	            <security:authorize access="!hasAnyRole('ROLE_ADMIN', 'ROLE_CUSTOMER')">
+					<li class="nav-item" style="margin: 0 10px;">
+						<a class="btn btn-info" href="/fruits-shop/registration">Đăng kí</a>
+					</li>
+	            	<li class="nav-item">
+						<a class="btn btn-success" href="/fruits-shop/login">Đăng nhập</a>
+					</li>
+	             </security:authorize>
 			</ul>
 
 		</div>

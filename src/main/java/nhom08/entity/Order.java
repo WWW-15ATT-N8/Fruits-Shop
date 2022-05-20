@@ -198,5 +198,18 @@ public class Order implements Serializable {
 				+ shipAddress + ", shipPhone=" + shipPhone + ", comment=" + comment + ", discount=" + discount
 				+ ", user=" + user + ", status=" + status + "]";
 	}
+	
+	public double getTongTien(){
+		double total = 0;
+		for(Order_Detail o : order_Details)
+			total += o.getPrice() * o.getAmount();
+		return total;
+	}
+	
+	public double getThanhTien(){
+		double total = getTongTien();
+		total = total*1.08 - total*this.discount;
+		return total;
+	}
 
 }

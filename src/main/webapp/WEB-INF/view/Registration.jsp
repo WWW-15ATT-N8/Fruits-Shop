@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Trang chủ - Vinfruts</title>
+	<title>Đăng ký - Vinfruts</title>
 	<meta name=”viewport” content=” width=device-width, initial-scale=1″>
 	<!-- <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css" /> -->
 	<!-- <script src="../bootstrap/jquery/jquery-3.6.0.min.js"></script>
@@ -22,7 +22,11 @@
 	        <script src="../js/functionsHandle.js"></script>
 	        <script src="../js/regex.js"></script>
 	        <script src="../js/search.js"></script>  -->
-
+<style type="text/css">
+#form-login{
+			min-height: 350px;
+}
+</style>
 </head>
 <body>
 	<div class="wrapper">
@@ -31,9 +35,10 @@
 
 
 		<div class="container-fluid" id="form-login">
-			<div class="row">
+			<div class="row" id="form-body">
 				<form:form modelAttribute="Account" action="${pageContext.request.contextPath}/registration/processRegistrationForm"
-				class="login100-form validate-form" style="background: whitesmoke;border-radius: 30px;padding: 10px 40px;">
+				class="login100-form validate-form" style="background: whitesmoke;border-radius: 30px;padding: 10px 40px;margin: auto;">
+				 	<center><h3>Đăng ký</h3></center>	
 					<form:input  path="accountID" type="hidden" value="0"/>
 					<form:input  path="enabled" type="hidden" value="1"/>
 					<div class="row">

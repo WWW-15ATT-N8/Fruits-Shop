@@ -28,6 +28,7 @@ import nhom08.entity.Order_Detail;
 import nhom08.entity.Status;
 import nhom08.entity.User;
 import nhom08.service.CartService;
+import nhom08.service.OrderDetailService;
 import nhom08.service.OrderService;
 import nhom08.service.ProductService;
 
@@ -42,6 +43,9 @@ public class UserController {
 	private OrderService orderService;
 	
 	@Autowired
+	private OrderDetailService orderDetailService;
+	
+	@Autowired
 	private CartService cartService;
 	
 	@InitBinder
@@ -51,7 +55,7 @@ public class UserController {
 	}
 	
 	
-	@PostMapping("/cart/addcart")
+	@GetMapping("/cart/addcart")
 	public String addCart(HttpServletRequest request, HttpSession session, @RequestParam("productID") int productID,
 						  @RequestParam("quantity") int quantity , Model theModel){
 		User u = (User) session.getAttribute("USER");
@@ -63,19 +67,19 @@ public class UserController {
 		else {
 			cart.setAmount(cart.getAmount() + quantity);
 		}
-//		double total = (double)session.getAttribute("total")  + cart.getProduct().getPrice()*quantity;
-//		
-//		session.setAttribute("total", total );		
+		
+		double total = (double)session.getAttribute("total")  + cart.getProduct().getPrice()*quantity;	
+		session.setAttribute("total", total );		
 		cartService.saveCart(cart);
 		return "redirect:/product/id=" + productID;
 	}
 	
-	@PostMapping("/cart/updatecart")
+	@GetMapping("/cart/updatecart")
 	public String updateCart(HttpServletRequest request, HttpSession session, Model theModel) {
 		String []listAmount = request.getParameterValues("amount");
 		User u = (User)session.getAttribute("USER");
 		List<Cart> carts = cartService.getCartsbyUserID(u.getUserID());
-		double total = 0;
+		double total = 0.0;
 		for(int i = carts.size() - 1;i >= 0 ; i--) {
 			if(Integer.valueOf(listAmount[i])>0) {
 				carts.get(i).setAmount(Integer.valueOf(listAmount[i]));
@@ -85,7 +89,7 @@ public class UserController {
 			else
 				cartService.deleteCart(carts.get(i));
 		}	
-//		session.setAttribute("total",total);
+		session.setAttribute("total",total);
 		return "redirect:/user/cart/";
 	}
 	
@@ -102,20 +106,22 @@ public class UserController {
 	@GetMapping("/order")
 	public String thanhToan(HttpServletRequest request, HttpSession session, Model theModel) {
 		User u = (User)session.getAttribute("USER");
+		if(u.getFullName().equals("")) {
+			theModel.addAttribute("saveOrderError", "Vui lòng cập nhật đầy đủ thông tin trước khi đặt hàng");
+			return "customer/ThongTinCaNhan";
+		}
 		List<Cart> carts = cartService.getCartsbyUserID(u.getUserID());
-
 		theModel.addAttribute("Order", new Order());
 		theModel.addAttribute("carts", carts);
 		return "customer/ThanhToan";
 	}
 	
-	@PostMapping("/order/saveorder")
+	@GetMapping("/order/saveorder")
 	public String saveOrder(HttpServletRequest request, HttpSession session, @Valid @ModelAttribute("Order") Order theOrder, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) 
 			return "customer/ThanhToan";
 		Date now = new Date(System.currentTimeMillis());
 		User u = (User)session.getAttribute("USER");
-		System.out.println(u);
 		List<Cart> carts = cartService.getCartsbyUserID(u.getUserID());
 		List<Order_Detail> details = new ArrayList<Order_Detail>();
 		for(Cart c : carts) {
@@ -133,7 +139,7 @@ public class UserController {
 		for(Cart c : carts) 
 			cartService.deleteCart(c);
 		int orderID = orderService.getMaxID();
-//		session.setAttribute("total",0.0);
+		session.setAttribute("total",0.0);
 		return "redirect:/user/order/id=" + orderID;
 	}
 	
@@ -141,9 +147,25 @@ public class UserController {
 	public String getOrder(HttpServletRequest request, HttpSession session,
 							@PathVariable int orderID, Model theModel) {
 		Order o = orderService.getOrder(orderID);
-		System.out.println(o);
+		List<Order_Detail> details = orderDetailService.getOrdersDetailsByOrderID(o.getOrderID());
+
+		o.setOrder_Details(details);
 		theModel.addAttribute("ORDER", o);
 		return "customer/ChiTietDonHang";
+	}
+	
+	@GetMapping({"/order/list","/order/list/"})
+	public String listOrder(HttpServletRequest request, HttpSession session,Model theModel) {
+		User user = (User)session.getAttribute("USER");
+		List<Order> orders = orderService.getOrdersByDK(" where userID=" + user.getUserID());
+		theModel.addAttribute("listorder",  orders);
+		return "customer/DanhSachDonHang";
+	}
+	
+	@GetMapping("/thong-tin-ca-nhan")
+	public String getInfo(){
+
+		return "customer/ThongTinCaNhan";
 	}
 	
 }
